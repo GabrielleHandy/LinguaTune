@@ -32,5 +32,66 @@ public class FlashCardStack {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<FlashCard> flashcards;
 
+    public FlashCardStack() {
+    }
 
+
+    public FlashCardStack(Long id, String title,  StudyPage madeBy, List<FlashCard> flashcards) {
+        this.id = id;
+        this.title = title;
+        this.dateMade = new Date();
+        this.madeBy = madeBy;
+        this.flashcards = flashcards;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Date getDateMade() {
+        return dateMade;
+    }
+
+    public void setDateMade(Date dateMade) {
+        this.dateMade = dateMade;
+    }
+
+    public StudyPage getMadeBy() {
+        return madeBy;
+    }
+
+    public void setMadeBy(StudyPage madeBy) {
+        this.madeBy = madeBy;
+    }
+
+    public List<FlashCard> getFlashcards() {
+        return flashcards;
+    }
+
+    public void setFlashcards(List<FlashCard> flashcards) {
+        this.flashcards = flashcards;
+    }
+
+    @Override
+    public String toString() {
+        return "FlashCardStack{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", dateMade=" + dateMade.toString() +
+                ", madeBy=" + madeBy.getUser().getUserName() +
+                ", flashcard Amount=" + flashcards.size() +
+                '}';
+    }
 }
