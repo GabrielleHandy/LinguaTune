@@ -7,6 +7,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "studypages")
@@ -31,16 +32,16 @@ public class StudyPage {
             joinColumns = {@JoinColumn(name = "studypage_id")},
             inverseJoinColumns = {@JoinColumn(name = "flashcardstack_id")})
     @LazyCollection(LazyCollectionOption.FALSE)
-    private Set<FlashcardStack> flashcardStacks = new HashSet<>();
+    private Set<FlashCardStack> flashcardStacks = new HashSet<>();
 
     @Column
-    private List<Song> recentSongs = new List<Song>();
+    private List<Song> recentSongs;
 
 
     public StudyPage() {
     }
 
-    public StudyPage(Long id, User user, Language language, Set<FlashcardStack> flashcardStacks, List<Song> recentSongs) {
+    public StudyPage(Long id, User user, Language language, Set<FlashCardStack> flashcardStacks, List<Song> recentSongs) {
         this.id = id;
         this.user = user;
         this.language = language;
@@ -72,11 +73,11 @@ public class StudyPage {
         this.language = language;
     }
 
-    public Set<FlashcardStack> getFlashcardStacks() {
+    public Set<FlashCardStack> getFlashcardStacks() {
         return flashcardStacks;
     }
 
-    public void setFlashcardStacks(Set<FlashcardStack> flashcardStacks) {
+    public void setFlashcardStacks(Set<FlashCardStack> flashcardStacks) {
         this.flashcardStacks = flashcardStacks;
     }
 
