@@ -1,12 +1,15 @@
 package com.example.linguatune.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class UserModel {
+public class User {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,13 +21,15 @@ public class UserModel {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column
     private String password;
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @Column
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<StudyPage> studyPages;
-
-    public UserModel() {
+    public User() {
     }
 
-    public UserModel(Long id, String userName, String emailAddress, String password, List<studyPage> studyPages) {
+
+    public User(Long id, String userName, String emailAddress, String password, List<StudyPage> studyPages) {
         this.id = id;
         this.userName = userName;
         this.emailAddress = emailAddress;
@@ -64,12 +69,12 @@ public class UserModel {
         this.password = password;
     }
 
-    public List<studyPage> getStudyPages() {
-        return studyPage;
+    public List<StudyPage> getStudyPages() {
+        return studyPages;
     }
 
-    public void setStudyPages(List<studyPage> studyPage) {
-        this.studyPage = studyPage;
+    public void setStudyPages(List<StudyPage> studyPages) {
+        this.studyPages = studyPages;
     }
 
     @Override
