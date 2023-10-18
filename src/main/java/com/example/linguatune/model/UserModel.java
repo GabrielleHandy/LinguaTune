@@ -19,18 +19,66 @@ public class UserModel {
     @Column
     private String password;
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private studyPage studyPage;
+    private List<StudyPage> studyPages;
 
     public UserModel() {
     }
 
-    public UserModel(Long id, String userName, String emailAddress, String password, studyPage studyPage) {
+    public UserModel(Long id, String userName, String emailAddress, String password, List<studyPage> studyPages) {
         this.id = id;
         this.userName = userName;
         this.emailAddress = emailAddress;
         this.password = password;
+        this.studyPages = studyPages;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public List<studyPage> getStudyPages() {
+        return studyPage;
+    }
+
+    public void setStudyPages(List<studyPage> studyPage) {
         this.studyPage = studyPage;
     }
 
-
+    @Override
+    public String toString() {
+        return "UserModel{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
+                ", studyPages=" + studyPages +
+                '}';
+    }
 }
