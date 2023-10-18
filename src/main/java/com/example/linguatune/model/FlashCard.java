@@ -1,8 +1,8 @@
 package com.example.linguatune.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "flashcards")
@@ -10,7 +10,22 @@ public class FlashCard {
 
 
     @Id
+    @Column
+    @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;
+
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @JoinColumn(name = "flashcardstack_id")
+    private FlashCardStack cardStack;
+
+
+    @Column
+    private String originalText;
+
+    @Column
+    private String translatedText;
 
 
 
