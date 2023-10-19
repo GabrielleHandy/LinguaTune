@@ -24,21 +24,25 @@ public class Language {
 
     @OneToMany(mappedBy = "language", orphanRemoval = true)
     @Column
+    @JsonIgnore
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<StudyPage> studyPages;
 
     @OneToMany(mappedBy = "original_lan", orphanRemoval = true)
     @Column
+    @JsonIgnore
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Song> songs;
 
     @OneToMany(mappedBy = "nativeLanguage", orphanRemoval = true)
     @Column
+    @JsonIgnore
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<User> users;
 
-    @OneToMany(mappedBy = "translation", orphanRemoval = true)
+    @OneToMany(mappedBy = "translation_lan", orphanRemoval = true)
     @Column
+    @JsonIgnore
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Translation> translations;
 
