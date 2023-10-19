@@ -1,11 +1,12 @@
 package com.example.linguatune.seed;
+import com.example.linguatune.model.Language;
+import com.example.linguatune.model.User;
 import com.example.linguatune.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-
 public class SeedData implements CommandLineRunner {
     private final UserRepository userRepository;
 
@@ -33,5 +34,22 @@ public class SeedData implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        Language English = new Language();
+        English.setLanguageCode("en");
+        English.setName("English");
+        languageRepository.saveAndFlush(English);
+
+        Language Spanish = new Language();
+        English.setLanguageCode("spa");
+        English.setName("Spanish");
+        languageRepository.saveAndFlush(Spanish);
+
+        Language French = new Language();
+        English.setLanguageCode("fr");
+        English.setName("French");
+        languageRepository.saveAndFlush(French);
+
+
+
     }
 }
