@@ -16,12 +16,10 @@ public class FlashCard {
 
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
     @JoinColumn(name = "flashcardstack_id")
     private FlashCardStack cardStack;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
     @JoinColumn(name = "song_id")
     private Song fromSong;
 

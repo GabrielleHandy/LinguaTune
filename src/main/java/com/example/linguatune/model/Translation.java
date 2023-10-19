@@ -1,8 +1,10 @@
 package com.example.linguatune.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.Map;
 
 @Entity
 @Table(name = "translations")
@@ -22,13 +24,15 @@ public class Translation {
     @JoinColumn(name = "song_id")
     private Song translatedSong;
 
-    @Column
-    private Object lines;
+
+
+    @Column(columnDefinition = "OTHER")
+    private String lines;
 
     public Translation() {
     }
 
-    public Translation(Long id, Language translation_lan, Song translatedSong, Object lines) {
+    public Translation(Long id, Language translation_lan, Song translatedSong, String lines) {
         this.id = id;
         this.translation_lan = translation_lan;
         this.translatedSong = translatedSong;
@@ -43,13 +47,7 @@ public class Translation {
         this.id = id;
     }
 
-    public Language getTranslation_lan() {
-        return translation_lan;
-    }
 
-    public void setTranslation_lan(Language translation_lan) {
-        this.translation_lan = translation_lan;
-    }
 
     public Song getTranslatedSong() {
         return translatedSong;
@@ -59,11 +57,19 @@ public class Translation {
         this.translatedSong = translatedSong;
     }
 
-    public Object getLines() {
+    public Language getTranslation_lan() {
+        return translation_lan;
+    }
+
+    public void setTranslation_lan(Language translation_lan) {
+        this.translation_lan = translation_lan;
+    }
+
+    public String getLines() {
         return lines;
     }
 
-    public void setLines(Object lines) {
+    public void setLines(String lines) {
         this.lines = lines;
     }
 
@@ -71,7 +77,7 @@ public class Translation {
     public String toString() {
         return "Translation{" +
                 "id=" + id +
-                ", translation_lan=" + translation_lan.getName() +
+                ", translation_lan=" + translation_lan +
                 ", translatedSong=" + translatedSong.getTitle() +
                 '}';
     }

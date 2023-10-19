@@ -1,6 +1,7 @@
 package com.example.linguatune.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -24,24 +25,29 @@ import javax.persistence.*;
         private String artist;
         @OneToMany(mappedBy = "fromSong", orphanRemoval = true)
         @Column
+        @JsonIgnore
         @LazyCollection(LazyCollectionOption.FALSE)
         private List<FlashCard> flashCards;
         @Column
         private String mp4Link;
         @Column
-        private Object lyrics;
+        private String lyrics;
         @Column
         private String original_lan;
 
+        @Column
+        private String pictureLink;
+
         @OneToMany(mappedBy = "translatedSong", orphanRemoval = true)
         @Column
+        @JsonIgnore
         @LazyCollection(LazyCollectionOption.FALSE)
         private List<Translation> availableTrans;
 
     public Song() {
     }
 
-    public Song(Long id, String title, String artist, List<FlashCard> flashCards, Object lyrics, String original_lan, List<Translation> availableTrans) {
+    public Song(Long id, String title, String artist, List<FlashCard> flashCards, String lyrics, String original_lan, List<Translation> availableTrans, String pictureLink) {
         this.id = id;
         this.title = title;
         this.artist = artist;
@@ -49,6 +55,7 @@ import javax.persistence.*;
         this.lyrics = lyrics;
         this.original_lan = original_lan;
         this.availableTrans = availableTrans;
+        this.pictureLink =pictureLink;
     }
 
     public Long getId() {
@@ -83,11 +90,11 @@ import javax.persistence.*;
         this.flashCards = flashCards;
     }
 
-    public Object getLyrics() {
+    public String getLyrics() {
         return lyrics;
     }
 
-    public void setLyrics(Object lyrics) {
+    public void setLyrics(String lyrics) {
         this.lyrics = lyrics;
     }
 
@@ -113,6 +120,15 @@ import javax.persistence.*;
 
     public void setMp4Link(String mp4Link) {
             this.mp4Link = mp4Link;
+        }
+
+
+        public String getPictureLink() {
+            return pictureLink;
+        }
+
+        public void setPictureLink(String pictureLink) {
+            this.pictureLink = pictureLink;
         }
 
         @Override

@@ -18,28 +18,28 @@ public class StudyPage {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
+
     @JoinColumn(name = "language_id")
     private Language language;
 
     @OneToMany(mappedBy = "madeBy", orphanRemoval = true)
     @Column
+    @JsonIgnore
     @LazyCollection(LazyCollectionOption.FALSE)
     private Set<FlashCardStack> flashcardStacks = new HashSet<>();
 
     @Column
-    private List<Song> recentSongs;
+    private String recentSongs;
 
 
     public StudyPage() {
     }
 
-    public StudyPage(Long id, User user, Language language, Set<FlashCardStack> flashcardStacks, List<Song> recentSongs) {
+    public StudyPage(Long id, User user, Language language, Set<FlashCardStack> flashcardStacks, String recentSongs) {
         this.id = id;
         this.user = user;
         this.language = language;
@@ -79,11 +79,11 @@ public class StudyPage {
         this.flashcardStacks = flashcardStacks;
     }
 
-    public List<Song> getRecentSongs() {
+    public String getRecentSongs() {
         return recentSongs;
     }
 
-    public void setRecentSongs(List<Song> recentSongs) {
+    public void setRecentSongs(String recentSongs) {
         this.recentSongs = recentSongs;
     }
 

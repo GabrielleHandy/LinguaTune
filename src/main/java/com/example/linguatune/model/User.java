@@ -21,7 +21,6 @@ public class User {
     private String emailAddress;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
     @JoinColumn(name = "language_id")
     private Language nativeLanguage;
 
@@ -30,6 +29,7 @@ public class User {
     private String password;
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     @Column
+    @JsonIgnore
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<StudyPage> studyPages;
 

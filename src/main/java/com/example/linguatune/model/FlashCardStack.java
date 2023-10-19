@@ -22,7 +22,6 @@ public class FlashCardStack {
     @Column
     private Date dateMade;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
     @JoinColumn(name = "studypage_id")
     private StudyPage madeBy;
 
@@ -30,6 +29,7 @@ public class FlashCardStack {
     private Long percentageCorrect;
     @OneToMany(mappedBy = "cardStack", orphanRemoval = true)
     @Column
+    @JsonIgnore
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<FlashCard> flashcards;
 
