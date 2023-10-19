@@ -31,7 +31,8 @@ public class FlashCard {
     @Column
     private String translatedText;
 
-
+    @Column
+    private boolean correct;
     public FlashCard() {
     }
 
@@ -41,6 +42,7 @@ public class FlashCard {
         this.fromSong = fromSong;
         this.originalText = originalText;
         this.translatedText = translatedText;
+        this.correct = false;
     }
 
     public void setId(Long id) {
@@ -81,6 +83,14 @@ public class FlashCard {
 
     public void setTranslatedText(String translatedText) {
         this.translatedText = translatedText;
+    }
+
+    public boolean isCorrect() {
+        return correct;
+    }
+
+    public void setCorrect(boolean correct) {
+        this.correct = correct;
     }
 
     @Override

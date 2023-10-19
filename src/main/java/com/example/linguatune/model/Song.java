@@ -26,19 +26,22 @@ import javax.persistence.*;
         @Column
         @LazyCollection(LazyCollectionOption.FALSE)
         private List<FlashCard> flashCards;
-
+        @Column
+        private String mp4Link;
         @Column
         private Object lyrics;
         @Column
         private String original_lan;
 
+        @OneToMany(mappedBy = "translatedSong", orphanRemoval = true)
         @Column
-        private List<String> availableTrans;
+        @LazyCollection(LazyCollectionOption.FALSE)
+        private List<Translation> availableTrans;
 
     public Song() {
     }
 
-    public Song(Long id, String title, String artist, List<FlashCard> flashCards, Object lyrics, String original_lan, List<String> availableTrans) {
+    public Song(Long id, String title, String artist, List<FlashCard> flashCards, Object lyrics, String original_lan, List<Translation> availableTrans) {
         this.id = id;
         this.title = title;
         this.artist = artist;
@@ -96,16 +99,23 @@ import javax.persistence.*;
         this.original_lan = original_lan;
     }
 
-    public List<String> getAvailableTrans() {
+    public List<Translation> getAvailableTrans() {
         return availableTrans;
     }
 
-    public void setAvailableTrans(List<String> availableTrans) {
+    public void setAvailableTrans(List<Translation> availableTrans) {
         this.availableTrans = availableTrans;
     }
 
+    public String getMp4Link() {
+            return mp4Link;
+        }
 
-    @Override
+    public void setMp4Link(String mp4Link) {
+            this.mp4Link = mp4Link;
+        }
+
+        @Override
     public String toString() {
         return "Song{" +
                 "id=" + id +

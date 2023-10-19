@@ -1,5 +1,6 @@
 package com.example.linguatune.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -18,6 +19,12 @@ public class User {
     private String userName;
     @Column(unique = true)
     private String emailAddress;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @JoinColumn(name = "language_id")
+    private Language nativeLanguage;
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column
     private String password;
@@ -25,14 +32,16 @@ public class User {
     @Column
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<StudyPage> studyPages;
+
+
     public User() {
     }
 
-
-    public User(Long id, String userName, String emailAddress, String password, List<StudyPage> studyPages) {
+    public User(Long id, String userName, String emailAddress, Language nativeLanguage, String password, List<StudyPage> studyPages) {
         this.id = id;
         this.userName = userName;
         this.emailAddress = emailAddress;
+        this.nativeLanguage = nativeLanguage;
         this.password = password;
         this.studyPages = studyPages;
     }
@@ -61,6 +70,14 @@ public class User {
         this.emailAddress = emailAddress;
     }
 
+    public Language getNativeLanguage() {
+        return nativeLanguage;
+    }
+
+    public void setNativeLanguage(Language nativeLanguage) {
+        this.nativeLanguage = nativeLanguage;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -77,13 +94,16 @@ public class User {
         this.studyPages = studyPages;
     }
 
+
     @Override
     public String toString() {
-        return "UserModel{" +
+        return "User{" +
                 "id=" + id +
                 ", userName='" + userName + '\'' +
                 ", emailAddress='" + emailAddress + '\'' +
-                ", studyPages=" + studyPages +
+                ", nativeLanguage=" + nativeLanguage +
+                ", password='" + password + '\'' +
+                ", studyPages=" + studyPages.toString() +
                 '}';
     }
 }

@@ -87,14 +87,15 @@ public class StudyPage {
         this.recentSongs = recentSongs;
     }
 
+
     @Override
     public String toString() {
         return "StudyPage{" +
                 "id=" + id +
                 ", user=" + user.getUserName() +
                 ", language=" + language +
-                ", flashcardStacks=" + flashcardStacks +
-                ", recentSongs=" + recentSongs +
+                ", flashcardStacks=" + flashcardStacks.toString() +
+                ", recentSongs=" + recentSongs.toString() +
                 '}';
     }
 }

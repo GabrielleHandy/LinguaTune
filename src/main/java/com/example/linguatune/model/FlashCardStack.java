@@ -26,7 +26,8 @@ public class FlashCardStack {
     @JoinColumn(name = "studypage_id")
     private StudyPage madeBy;
 
-
+    @Column
+    private Long percentageCorrect;
     @OneToMany(mappedBy = "cardStack", orphanRemoval = true)
     @Column
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -42,6 +43,7 @@ public class FlashCardStack {
         this.dateMade = new Date();
         this.madeBy = madeBy;
         this.flashcards = flashcards;
+        this.percentageCorrect = 0L;
     }
 
     public Long getId() {
@@ -82,6 +84,19 @@ public class FlashCardStack {
 
     public void setFlashcards(List<FlashCard> flashcards) {
         this.flashcards = flashcards;
+    }
+
+    public Long getPercentageCorrect() {
+        return percentageCorrect;
+    }
+
+    public void setPercentageCorrect(Long percentageCorrect) {
+        this.percentageCorrect = percentageCorrect;
+    }
+
+    public void calculatePercentageCorrect(){
+        long correct = this.flashcards.stream().filter(FlashCard::isCorrect).count();
+        this.percentageCorrect = correct>0?(correct/flashcards.size() * 100):0;
     }
 
     @Override

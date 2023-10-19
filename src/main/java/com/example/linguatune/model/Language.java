@@ -27,15 +27,35 @@ public class Language {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<StudyPage> studyPages;
 
+    @OneToMany(mappedBy = "original_lan", orphanRemoval = true)
+    @Column
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Song> songs;
+
+    @OneToMany(mappedBy = "nativeLanguage", orphanRemoval = true)
+    @Column
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<User> users;
+
+    @OneToMany(mappedBy = "translation", orphanRemoval = true)
+    @Column
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Translation> translations;
+
     public Language() {
     }
 
-    public Language(Long id, String name, String languageCode, List<StudyPage> studyPages) {
+    public Language(Long id, String name, String languageCode, List<StudyPage> studyPages, List<Song> songs, List<User> users, List<Translation> translations) {
         this.id = id;
         this.name = name;
         this.languageCode = languageCode;
         this.studyPages = studyPages;
+        this.songs = songs;
+        this.users = users;
+        this.translations = translations;
     }
+
+
 
 
     public Long getId() {
@@ -70,6 +90,29 @@ public class Language {
         this.studyPages = studyPages;
     }
 
+    public List<Song> getSongs() {
+        return songs;
+    }
+
+    public void setSongs(List<Song> songs) {
+        this.songs = songs;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public List<Translation> getTranslations() {
+        return translations;
+    }
+
+    public void setTranslations(List<Translation> translations) {
+        this.translations = translations;
+    }
 
     @Override
     public String toString() {
@@ -77,7 +120,10 @@ public class Language {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", languageCode='" + languageCode + '\'' +
-                ", Number of StudyPages=" + studyPages.toArray().length +
+                ",# studyPages=" + studyPages.size() +
+                ",# songs=" + songs.size() +
+                ",# users=" + users.size() +
+                ", # translations=" + translations.size() +
                 '}';
     }
 }
