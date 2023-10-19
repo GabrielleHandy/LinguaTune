@@ -27,10 +27,8 @@ public class StudyPage {
     @JoinColumn(name = "language_id")
     private Language language;
 
-    @ManyToMany
-    @JoinTable(name = "studypage_flashcardstack",
-            joinColumns = {@JoinColumn(name = "studypage_id")},
-            inverseJoinColumns = {@JoinColumn(name = "flashcardstack_id")})
+    @OneToMany(mappedBy = "madeBy", orphanRemoval = true)
+    @Column
     @LazyCollection(LazyCollectionOption.FALSE)
     private Set<FlashCardStack> flashcardStacks = new HashSet<>();
 
