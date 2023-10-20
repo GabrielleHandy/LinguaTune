@@ -1,5 +1,6 @@
 package com.example.linguatune.serviceTests;
 
+import com.example.linguatune.exceptions.InformationNotFoundException;
 import com.example.linguatune.model.Language;
 import com.example.linguatune.model.StudyPage;
 import com.example.linguatune.model.User;
@@ -8,28 +9,36 @@ import com.example.linguatune.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTests {
 
-    @Mock
+    @InjectMocks
     UserService userService;
     @Mock
     UserRepository userRepository;
+
+
+
     private User user;
     private Language eng;
+
     @BeforeEach
     public void setUp(){
+
         MockitoAnnotations.initMocks(this);
 
         eng = new Language();
@@ -45,6 +54,16 @@ public class UserServiceTests {
     public void testGetUserById(){
         when(userService.findById(anyLong())).thenReturn(user);
         assertEquals(userService.findById(1L).getId(), user.getId());
+    }
+
+    @Test
+    public void testGetUserByIdFail(){
+
+        assertThrows(InformationNotFoundException.class, () -> {
+
+            userService.findById(2L);
+
+        });
     }
 
 }
