@@ -4,6 +4,7 @@ import com.example.linguatune.exceptions.InformationNotFoundException;
 import com.example.linguatune.model.Language;
 import com.example.linguatune.model.StudyPage;
 import com.example.linguatune.model.User;
+import com.example.linguatune.repository.LanguageRepository;
 import com.example.linguatune.repository.UserRepository;
 import com.example.linguatune.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +34,10 @@ public class UserServiceTests {
     @InjectMocks
     UserService userServiceMock;
 
-
+    @Mock
+    PasswordEncoder passwordEncoder;
+    @Mock
+    LanguageRepository languageRepository;
 
 
     private User user;
@@ -60,6 +65,7 @@ public class UserServiceTests {
 
     @Test
     public void testGetUserByIdFail(){
+
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(InformationNotFoundException.class, () -> {
 
@@ -76,6 +82,7 @@ public class UserServiceTests {
 
     @Test
     public void testCreateUser(){
+    when(languageRepository.findById(1L)).thenReturn(Optional.ofNullable(eng));
     when(userRepository.save(any(User.class))).thenReturn(user);
     User result = userServiceMock.createUser(user);
     assertEquals(result.getEmailAddress(), user.getEmailAddress());
