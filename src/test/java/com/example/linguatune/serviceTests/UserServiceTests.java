@@ -15,6 +15,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
+
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTests {
 
@@ -22,23 +26,25 @@ public class UserServiceTests {
     UserService userService;
     @Mock
     UserRepository userRepository;
-
+    private User user;
+    private Language eng;
     @BeforeEach
     public void setUp(){
         MockitoAnnotations.initMocks(this);
 
-        Language eng = new Language();
+        eng = new Language();
         eng.setName("English");
         eng.setLanguageCode("en");
         eng.setId(1L);
 
 
-        User user = new User(1L, "LanguageLover", "test@test.com", eng, "111", new ArrayList<StudyPage>() );
+        user = new User(1L, "LanguageLover", "test@test.com", eng, "111", new ArrayList<StudyPage>() );
     }
 
     @Test
     public void testGetUserById(){
-
+        when(userService.findById(anyLong())).thenReturn(user);
+        assertEquals(userService.findById(1L).getId(), user.getId());
     }
 
 }
