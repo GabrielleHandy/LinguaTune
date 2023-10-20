@@ -26,10 +26,12 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTests {
 
-    @InjectMocks
-    UserService userService;
+
     @Mock
     UserRepository userRepository;
+    @InjectMocks
+    UserService userServiceMock;
+
 
 
 
@@ -38,7 +40,7 @@ public class UserServiceTests {
 
     @BeforeEach
     public void setUp(){
-
+        userServiceMock.setUserRepository(userRepository);
         MockitoAnnotations.initMocks(this);
 
         eng = new Language();
@@ -52,18 +54,32 @@ public class UserServiceTests {
 
     @Test
     public void testGetUserById(){
-        when(userService.findById(anyLong())).thenReturn(user);
-        assertEquals(userService.findById(1L).getId(), user.getId());
+        when(userServiceMock.findById(anyLong())).thenReturn(user);
+        assertEquals(userServiceMock.findById(1L).getId(), user.getId());
     }
 
     @Test
     public void testGetUserByIdFail(){
-
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(InformationNotFoundException.class, () -> {
 
-            userService.findById(2L);
+            userServiceMock.findById(2L);
 
         });
+    }
+
+    @Test
+    public void testFindByEmailAddress(){
+        when(userRepository.findByEmailAddress(anyString())).thenReturn(user);
+        assertEquals(userServiceMock.findByEmailAddress("test").getId(), user.getId());
+    }
+
+    @Test
+    public void testCreateUser(){
+    when(userRepository.save(any(User.class))).thenReturn(user);
+    User result = userServiceMock.createUser(user);
+    assertEquals(result.getEmailAddress(), user.getEmailAddress());
+
     }
 
 }

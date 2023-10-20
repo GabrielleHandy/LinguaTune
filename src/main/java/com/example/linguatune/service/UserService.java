@@ -11,12 +11,13 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
 
     public User findById(Long id){
         Optional<User> optionalUser = userRepository.findById(id);
