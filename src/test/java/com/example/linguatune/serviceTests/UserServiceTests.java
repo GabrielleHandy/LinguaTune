@@ -20,8 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
@@ -88,5 +87,13 @@ public class UserServiceTests {
     assertEquals(result.getEmailAddress(), user.getEmailAddress());
 
     }
+    @Test
+    public void testUpdateUser(){
+        User updated = user;
+        updated.setUserName("Updated");
+        when(userRepository.save(any(User.class))).thenReturn(updated);
+        User result = userServiceMock.updateUser(user);
+        assertNotEquals(result.getUserName(), user.getUserName());
 
+    }
 }
