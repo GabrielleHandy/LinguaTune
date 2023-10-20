@@ -26,7 +26,7 @@ public class Translation {
 
 
 
-    @Column(columnDefinition = "OTHER")
+    @Column
     private String lines;
 
     public Translation() {
@@ -78,7 +78,8 @@ public class Translation {
         return "Translation{" +
                 "id=" + id +
                 ", translation_lan=" + translation_lan +
-                ", translatedSong=" + translatedSong.getTitle() +
+                ", translatedSong=" + translatedSong +
+                ", lines='" + lines + '\'' +
                 '}';
     }
 }

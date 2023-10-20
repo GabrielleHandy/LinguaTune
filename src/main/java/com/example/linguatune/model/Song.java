@@ -123,14 +123,16 @@ import javax.persistence.*;
     }
 
         @Override
-    public String toString() {
-        return "Song{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", artist='" + artist + '\'' +
-                ", popularity=" + flashCards.size() + '\'' +
-                ", original_lan='" + original_lan + '\'' +
-                ", availableTrans=" + availableTrans +
-                '}';
+        public String toString() {
+            return "Song{" +
+                    "id=" + id +
+                    ", title='" + title + '\'' +
+                    ", artist='" + artist + '\'' +
+                    ", flashCards=" + flashCards +
+                    ", uri='" + uri + '\'' +
+                    ", original_lan='" + original_lan + '\'' +
+                    ", pictureLink='" + pictureLink + '\'' +
+                    ", availableTrans=" + availableTrans +
+                    '}';
+        }
     }
-}

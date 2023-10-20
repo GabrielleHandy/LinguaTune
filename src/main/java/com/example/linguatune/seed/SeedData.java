@@ -89,9 +89,16 @@ public class SeedData implements CommandLineRunner {
         danse.put("artist", "Indila");
         danse.put("image", "https://i.scdn.co/image/ab67616d0000b2734ae8ff731c49965bf2083405");
 
-        List<Song> songs = objectMapper.readValue(new File("C:\\Users\\gehan\\Desktop\\unit2\\Projects\\LinguaTune\\src\\main\\java\\com\\example\\linguatune\\seed\\songs.json"), new TypeReference<List<Song>>(){});
-        songRepository.saveAll(songs);
+        List<Song> songs = objectMapper.readValue(new File("..\\LinguaTune\\src\\main\\java\\com\\example\\linguatune\\seed\\songs.json"), new TypeReference<List<Song>>(){});
 
+        songs = songRepository.saveAll(songs);
+        for(Song song: songs){
+            Translation engTrans = new Translation();
+            engTrans.setTranslation_lan(English);
+            engTrans.setTranslatedSong(song);
+            engTrans.setLines("..\\LinguaTune\\src\\main\\java\\com\\example\\linguatune\\translations\\english\\" + song.getUri()+ ".json");
+            translationRepository.save(engTrans);
+        }
 
 
         FlashCardStack flashCardStack = new FlashCardStack();
@@ -100,7 +107,7 @@ public class SeedData implements CommandLineRunner {
         flashCardStack = flashCardStackRepository.save(flashCardStack);
 
         FlashCard flashCard = new FlashCard();
-        flashCard.setFromSong(songRepository.findById(1L).get());
+        flashCard.setFromSong(songs.get(0));
         flashCard.setCardStack(flashCardStack);
         flashCard.setOriginalText("Danse");
         flashCard.setTranslatedText("Dance");

@@ -106,9 +106,10 @@ public class FlashCardStack {
         return "FlashCardStack{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", dateMade=" + dateMade.toString() +
-                ", madeBy=" + madeBy.getUser().getUserName() +
-                ", flashcard Amount=" + flashcards.size() +
+                ", dateMade=" + dateMade +
+                ", madeBy=" + madeBy +
+                ", percentageCorrect=" + percentageCorrect +
+                ", flashcards=" + flashcards +
                 '}';
     }
 }

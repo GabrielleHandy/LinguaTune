@@ -96,9 +96,10 @@ public class FlashCard {
         return "FlashCard{" +
                 "id=" + id +
                 ", cardStack=" + cardStack +
-                ", fromSong=" + fromSong.getTitle() + " by " + fromSong.getArtist() +
+                ", fromSong=" + fromSong +
                 ", originalText='" + originalText + '\'' +
                 ", translatedText='" + translatedText + '\'' +
+                ", correct=" + correct +
                 '}';
     }
 }

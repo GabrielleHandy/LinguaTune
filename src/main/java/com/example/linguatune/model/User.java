@@ -102,8 +102,7 @@ public class User {
                 ", userName='" + userName + '\'' +
                 ", emailAddress='" + emailAddress + '\'' +
                 ", nativeLanguage=" + nativeLanguage +
-                ", password='" + password + '\'' +
-                ", studyPages=" + studyPages.toString() +
+                ", studyPages=" + studyPages +
                 '}';
     }
 }

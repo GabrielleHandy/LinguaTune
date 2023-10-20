@@ -124,10 +124,10 @@ public class Language {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", languageCode='" + languageCode + '\'' +
-                ",# studyPages=" + studyPages.size() +
-                ",# songs=" + songs.size() +
-                ",# users=" + users.size() +
-                ", # translations=" + translations.size() +
+                ", studyPages=" + studyPages +
+                ", songs=" + songs +
+                ", users=" + users +
+                ", translations=" + translations +
                 '}';
     }
 }
