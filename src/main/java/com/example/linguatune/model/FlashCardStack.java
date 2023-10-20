@@ -34,6 +34,8 @@ public class FlashCardStack {
     private List<FlashCard> flashcards;
 
     public FlashCardStack() {
+        this.dateMade = new Date();
+        this.percentageCorrect = 0L;
     }
 
 
