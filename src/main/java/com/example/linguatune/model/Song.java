@@ -29,9 +29,8 @@ import javax.persistence.*;
         @LazyCollection(LazyCollectionOption.FALSE)
         private List<FlashCard> flashCards;
         @Column
-        private String mp4Link;
-        @Column
-        private String lyrics;
+        private String uri;
+
         @Column
         private String original_lan;
 
@@ -47,17 +46,16 @@ import javax.persistence.*;
     public Song() {
     }
 
-    public Song(Long id, String title, String artist, List<FlashCard> flashCards, String lyrics, String original_lan, List<Translation> availableTrans, String pictureLink) {
-        this.id = id;
-        this.title = title;
-        this.artist = artist;
-        this.flashCards = flashCards;
-        this.lyrics = lyrics;
-        this.original_lan = original_lan;
-        this.availableTrans = availableTrans;
-        this.pictureLink =pictureLink;
-    }
-
+        public Song(Long id, String title, String artist, List<FlashCard> flashCards, String uri, String original_lan, String pictureLink, List<Translation> availableTrans) {
+            this.id = id;
+            this.title = title;
+            this.artist = artist;
+            this.flashCards = flashCards;
+            this.uri = uri;
+            this.original_lan = original_lan;
+            this.pictureLink = pictureLink;
+            this.availableTrans = availableTrans;
+        }
     public Long getId() {
         return id;
     }
@@ -90,15 +88,15 @@ import javax.persistence.*;
         this.flashCards = flashCards;
     }
 
-    public String getLyrics() {
-        return lyrics;
+    public String getUri() {
+            return uri;
     }
 
-    public void setLyrics(String lyrics) {
-        this.lyrics = lyrics;
+    public void setUri(String uri) {
+            this.uri = uri;
     }
 
-    public String getOriginal_lan() {
+        public String getOriginal_lan() {
         return original_lan;
     }
 
@@ -114,22 +112,15 @@ import javax.persistence.*;
         this.availableTrans = availableTrans;
     }
 
-    public String getMp4Link() {
-            return mp4Link;
-        }
-
-    public void setMp4Link(String mp4Link) {
-            this.mp4Link = mp4Link;
-        }
 
 
-        public String getPictureLink() {
-            return pictureLink;
-        }
+    public String getPictureLink() {
+        return pictureLink;
+    }
 
-        public void setPictureLink(String pictureLink) {
-            this.pictureLink = pictureLink;
-        }
+    public void setPictureLink(String pictureLink) {
+        this.pictureLink = pictureLink;
+    }
 
         @Override
     public String toString() {
