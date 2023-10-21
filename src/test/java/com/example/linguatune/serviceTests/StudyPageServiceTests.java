@@ -1,8 +1,14 @@
 package com.example.linguatune.serviceTests;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -42,7 +48,7 @@ public class StudyPageServiceTests {
 
     private static User user;
     private Language eng;
-
+    private StudyPage studyPage;
       @BeforeEach
     public void setUp(){
         MockitoAnnotations.openMocks(this);
@@ -58,8 +64,17 @@ public class StudyPageServiceTests {
 
 
         user = new User(1L, "LanguageLover", "test@test.com", eng, "111", new ArrayList<StudyPage>() );
+        studyPage = new StudyPage(1L, user, eng, null, null);
         studyPageServiceMock.setTestLoggedInUser(user);
     }
+
+
+     @Test
+    public void testGetUserById(){
+        when(studyPageRepository.findById(anyLong())).thenReturn(Optional.of(studyPage));
+        assertEquals(studyPageServiceMock.findById(1L).getId(), user.getId());
+    }
+
 }
 
     
