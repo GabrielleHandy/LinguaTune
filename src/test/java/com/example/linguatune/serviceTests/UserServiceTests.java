@@ -11,24 +11,15 @@ import com.example.linguatune.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.naming.Context;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -70,9 +61,9 @@ public class UserServiceTests {
 
     @BeforeEach
     public void setUp(){
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         userServiceMock.setUserRepository(userRepository);
-
+        
 
 
 
@@ -83,6 +74,7 @@ public class UserServiceTests {
 
 
         user = new User(1L, "LanguageLover", "test@test.com", eng, "111", new ArrayList<StudyPage>() );
+        userServiceMock.setTestLoggedInUser(user);
     }
 
     @Test
@@ -118,6 +110,7 @@ public class UserServiceTests {
     }
     @Test
     public void testUpdateUser(){
+        
         User updated = new User();
         updated.setUserName("Bloop");
 
@@ -126,6 +119,24 @@ public class UserServiceTests {
         User result = userServiceMock.updateUser(1L, updated);
 
         assert(result.getUserName().equals(user.getUserName()));
+
+    }
+
+    @Test
+    public void testUpdateUserFail(){
+        
+        User updated = new User();
+        
+        
+
+       
+        assertThrows(InformationNotFoundException.class, () -> {
+
+            userServiceMock.updateUser(3L, updated);
+
+
+        });
+        
 
     }
 }

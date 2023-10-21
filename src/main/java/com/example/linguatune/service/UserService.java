@@ -31,11 +31,16 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User setLoggedInUser() {
+
+    public void setTestLoggedInUser(User user){
+        loggedinUser = user;
+
+    }
+
+    public void setLoggedInUser() {
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         loggedinUser = userDetails.getUser();
-        //solely for ease in testing
-        return userDetails.getUser();
+        
     }
 
     public User findById(Long id){
@@ -51,7 +56,7 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        setLoggedInUser();
+        
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setNativeLanguage(languageRepository.findById(1L).get());
 
@@ -59,22 +64,25 @@ public class UserService {
     }
 
     public User updateUser(Long userId, User updatedUser) {
-        Optional<User> existingUserOptional = userRepository.findById(userId);
-        if (existingUserOptional.isPresent()) {
-            User existingUser = existingUserOptional.get();
-            if(updatedUser.getUserName() != null){
-                existingUser.setUserName(updatedUser.getUserName());
+        if(userId == loggedinUser.getId()){
+        
+            
+            
+                if(updatedUser.getUserName() != null){
+                    loggedinUser.setUserName(updatedUser.getUserName());
 
-            }
-            if(updatedUser.getPassword() != null){
-                existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+                }
+                if(updatedUser.getPassword() != null){
+                    loggedinUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
 
-            }
+                }
+            
+           
 
-            return userRepository.save(existingUser);
+            return userRepository.save(loggedinUser);
         } else {
 
-            throw new IllegalArgumentException();
+           throw new InformationNotFoundException("Can't updated user that isn't assigned to you");
         }
     }
 
