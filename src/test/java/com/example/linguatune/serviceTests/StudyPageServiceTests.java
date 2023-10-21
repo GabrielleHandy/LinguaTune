@@ -70,9 +70,9 @@ public class StudyPageServiceTests {
 
 
      @Test
-    public void testGetUserById(){
+    public void testfindStudyPageById(){
         when(studyPageRepository.findById(anyLong())).thenReturn(Optional.of(studyPage));
-        assertEquals(studyPageServiceMock.findById(1L).getId(), user.getId());
+        assertEquals(studyPageServiceMock.findStudyPageById(1L).getId(), studyPage.getId());
     }
 
 }

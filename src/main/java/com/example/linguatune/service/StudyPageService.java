@@ -1,12 +1,13 @@
 package com.example.linguatune.service;
 
 import java.util.ArrayList;
-
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.example.linguatune.exceptions.InformationNotFoundException;
 import com.example.linguatune.model.Language;
 import com.example.linguatune.model.StudyPage;
 import com.example.linguatune.model.User;
@@ -42,5 +43,13 @@ public class StudyPageService {
         
     }
 
+    public StudyPage findStudyPageById(long id){
+        Optional<StudyPage> optionalStudyPage = studyPageRepository.findById(id);
+        if(optionalStudyPage.isPresent()){
+            return optionalStudyPage.get();
+
+        }
+        throw new InformationNotFoundException("StudyPage with id " + id + " doesn't exist");
+    }
 
 }
