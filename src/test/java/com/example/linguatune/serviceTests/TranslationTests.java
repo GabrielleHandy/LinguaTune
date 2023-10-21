@@ -47,7 +47,7 @@ public class TranslationTests {
 
     @Test
     public void testGetTranslationFail(){
-        when(translationRepository.findById(anyLong())).thenReturn(null);
+        when(translationRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(InformationNotFoundException.class, ()->{
             translationService.getTranslation(6L);
 
