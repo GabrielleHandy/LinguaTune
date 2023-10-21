@@ -35,16 +35,14 @@ import com.example.linguatune.service.UserService;
 @ExtendWith(MockitoExtension.class)
 public class StudyPageServiceTests {
 
-     @Mock
+    @Mock
     UserService userService;
-
 
 
     @InjectMocks
     StudyPageService studyPageServiceMock;
 
-   
-   
+
     @Mock
     LanguageRepository languageRepository;
 
@@ -55,14 +53,12 @@ public class StudyPageServiceTests {
     private Language eng;
     private Language spa;
     private StudyPage studyPage;
-    private List<StudyPage>  pages;
+    private List<StudyPage> pages;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
         studyPageServiceMock = new StudyPageService(userService, studyPageRepository, languageRepository);
-        
-
 
 
         eng = new Language();
@@ -73,11 +69,11 @@ public class StudyPageServiceTests {
         spa = new Language();
         spa.setId(2L);
         spa.setName("Spanish");
-        
+
         pages = new ArrayList<StudyPage>();
-       
-        user = new User(1L, "LanguageLover", "test@test.com", eng, "111", new ArrayList<StudyPage>() );
-        
+
+        user = new User(1L, "LanguageLover", "test@test.com", eng, "111", new ArrayList<StudyPage>());
+
         studyPage = new StudyPage(1L, user, spa, null, null);
         user.setStudyPages(pages);
         pages.add(studyPage);
@@ -86,13 +82,13 @@ public class StudyPageServiceTests {
 
 
     @Test
-    public void testfindStudyPageById(){
+    public void testfindStudyPageById() {
         when(studyPageRepository.findById(anyLong())).thenReturn(Optional.of(studyPage));
         assertEquals(studyPageServiceMock.findStudyPageById(1L).getId(), studyPage.getId());
     }
 
     @Test
-    public void testfindStudyPageByIdFail(){
+    public void testfindStudyPageByIdFail() {
 
         when(studyPageRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(InformationNotFoundException.class, () -> {
@@ -102,29 +98,48 @@ public class StudyPageServiceTests {
         });
     }
 
-    @Test 
-    public void testCreateStudyPage(){
-    when(languageRepository.findByName("English")).thenReturn(eng);
-    when(studyPageRepository.save(any(StudyPage.class))).thenReturn(studyPage);
-    StudyPage result = studyPageServiceMock.createStudyPage("English");
-    assertEquals(result.getUser().getEmailAddress(), user.getEmailAddress());
+    @Test
+    public void testCreateStudyPage() {
+        when(languageRepository.findByName("English")).thenReturn(eng);
+        when(studyPageRepository.save(any(StudyPage.class))).thenReturn(studyPage);
+        StudyPage result = studyPageServiceMock.createStudyPage("English");
+        assertEquals(result.getUser().getEmailAddress(), user.getEmailAddress());
 
     }
 
-    @Test 
-    public void testCreateStudyPageFail(){
-    
-    when(languageRepository.findByName("Spanish")).thenReturn(spa);
+    @Test
+    public void testCreateStudyPageFail() {
 
-    assertThrows(AlreadyExistException.class, () -> {
+        when(languageRepository.findByName("Spanish")).thenReturn(spa);
 
-        studyPageServiceMock.createStudyPage("Spanish");
+        assertThrows(AlreadyExistException.class, () -> {
 
-    });
+            studyPageServiceMock.createStudyPage("Spanish");
 
+        });
 
     }
+
+    @Test
+    public void testDeleteStudyPage() {
+        when(studyPageRepository.findByIdAndUser(anyLong(), any(User.class))).thenReturn(studyPage);
+        StudyPage result = studyPageServiceMock.deleteStudyPage(1L);
+        assert(result.getLanguage().getName().equals(spa.getName()));
+
+    }
+
+
+    @Test
+    public void testDeleteStudyPageFail() {
+        when(studyPageRepository.findByIdAndUser(anyLong(), any(User.class))).thenReturn(null);
+
+        assertThrows(InformationNotFoundException.class, () -> {
+
+            studyPageServiceMock.deleteStudyPage(1L);
+
+        });
+    }
+
 }
-
     
 
