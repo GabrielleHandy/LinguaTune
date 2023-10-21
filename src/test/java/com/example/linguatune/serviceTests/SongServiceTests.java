@@ -14,11 +14,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
+import static jdk.internal.org.jline.reader.impl.LineReaderImpl.CompletionType.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -58,4 +61,23 @@ public class SongServiceTests {
 
     }
 
+    @Test
+    public void testGetSongsByArtists(){
+        java.util.List<Song> songList = new ArrayList<>();
+        songList.add(song);
+        when(songRepository.findAllByArtist(anyString())).thenReturn(songList);
+        List<Song> result = songService.getSongsByArtist('woop');
+        assert(result.contains(song));
+    }
+
+    @Test
+    public void testGetSongsByArtistsFail(){
+        when(songRepository.findAllByArtist(anyString())).thenReturn(new ArrayList<>());
+        assertThrows(InformationNotFoundException.class, ()->{
+
+            songService.getSongsByArtist('woop');
+        });
+
+
+    }
 }
