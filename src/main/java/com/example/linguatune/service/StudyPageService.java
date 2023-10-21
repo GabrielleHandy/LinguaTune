@@ -20,7 +20,7 @@ import com.example.linguatune.security.MyUserDetails;
 public class StudyPageService {
 
     private final StudyPageRepository studyPageRepository;
-    
+
     private LanguageRepository languageRepository;
 
     private final UserService userService;
@@ -28,13 +28,13 @@ public class StudyPageService {
     private static User loggedinUser;
 
     @Autowired
-    public StudyPageService(UserService userService, StudyPageRepository studyPageRepository, LanguageRepository languageRepository){
+    public StudyPageService(UserService userService, StudyPageRepository studyPageRepository, LanguageRepository languageRepository) {
         this.userService = userService;
         this.studyPageRepository = studyPageRepository;
         this.languageRepository = languageRepository;
     }
 
-    public void setTestLoggedInUser(User user){
+    public void setTestLoggedInUser(User user) {
         loggedinUser = user;
 
     }
@@ -42,31 +42,41 @@ public class StudyPageService {
     public void setLoggedInUser() {
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         loggedinUser = userDetails.getUser();
-        
+
     }
 
-    public StudyPage findStudyPageById(long id){
+    public StudyPage findStudyPageById(long id) {
         Optional<StudyPage> optionalStudyPage = studyPageRepository.findById(id);
-        if(optionalStudyPage.isPresent()){
+        if (optionalStudyPage.isPresent()) {
             return optionalStudyPage.get();
 
         }
         throw new InformationNotFoundException("StudyPage with id " + id + " doesn't exist");
     }
 
-    public StudyPage createStudyPage(String language){
-        
-            Language language1 = languageRepository.findByName(language);
-            if(!loggedinUser.getStudyPages().stream().anyMatch(studyPage -> studyPage.getLanguage().getName() == language1.getName())){
+    public StudyPage createStudyPage(String language) {
+
+        Language language1 = languageRepository.findByName(language);
+        if (!loggedinUser.getStudyPages().stream().anyMatch(studyPage -> studyPage.getLanguage().getName() == language1.getName())) {
             StudyPage newStudyPage = new StudyPage();
             newStudyPage.setLanguage(language1);
             newStudyPage.setUser(loggedinUser);
-            return studyPageRepository.save(newStudyPage); 
+            return studyPageRepository.save(newStudyPage);
         }
         throw new AlreadyExistException("You already have a Study Page for " + language);
-    
-        
+
+
+    }
+
+
+    public StudyPage deleteStudyPage(long l) {
+        Optional<StudyPage> studyPage = Optional.ofNullable(studyPageRepository.findByIdAndUser(l, loggedinUser));
+        if (studyPage.isPresent()) {
+            studyPageRepository.delete(studyPage.get());
+            return studyPage.get();
         }
-        
+
+        throw new InformationNotFoundException("You dont have a study page with id " + l);
+    }
 
 }
