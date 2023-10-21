@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +52,9 @@ public class StudyPageServiceTests {
 
     private static User user;
     private Language eng;
+    private Language spa;
     private StudyPage studyPage;
+    private List<StudyPage>  pages;
 
     @BeforeEach
     public void setUp(){
@@ -66,9 +69,17 @@ public class StudyPageServiceTests {
         eng.setLanguageCode("en");
         eng.setId(1L);
 
-
+        spa = new Language();
+        spa.setId(2L);
+        spa.setName("Spanish");
+        
+        pages = new ArrayList<StudyPage>();
+       
         user = new User(1L, "LanguageLover", "test@test.com", eng, "111", new ArrayList<StudyPage>() );
-        studyPage = new StudyPage(1L, user, eng, null, null);
+        
+        studyPage = new StudyPage(1L, user, spa, null, null);
+        user.setStudyPages(pages);
+        pages.add(studyPage);
         studyPageServiceMock.setTestLoggedInUser(user);
     }
 
@@ -99,6 +110,15 @@ public class StudyPageServiceTests {
 
     }
 
+    @Test 
+    public void testCreateStudyPageFail(){
+    
+    when(languageRepository.findByName("Spanish")).thenReturn(spa);
+    when(studyPageRepository.save(any(StudyPage.class))).thenReturn(studyPage);
+    StudyPage result = studyPageServiceMock.createStudyPage("Spanish");
+    assertEquals(result.getLanguage().getName(), studyPage.getLanguage().getName());
+
+    }
 }
 
     
