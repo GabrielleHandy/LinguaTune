@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.linguatune.exceptions.AlreadyExistException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -114,9 +115,13 @@ public class StudyPageServiceTests {
     public void testCreateStudyPageFail(){
     
     when(languageRepository.findByName("Spanish")).thenReturn(spa);
-    when(studyPageRepository.save(any(StudyPage.class))).thenReturn(studyPage);
-    StudyPage result = studyPageServiceMock.createStudyPage("Spanish");
-    assertEquals(result.getLanguage().getName(), studyPage.getLanguage().getName());
+
+    assertThrows(AlreadyExistException.class, () -> {
+
+        studyPageServiceMock.createStudyPage("Spanish");
+
+    });
+
 
     }
 }
