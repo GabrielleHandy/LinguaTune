@@ -86,5 +86,14 @@ public class UserService {
         }
     }
 
+    public User deleteUser(Long id){
+         if(id == loggedinUser.getId()){
 
+            userRepository.deleteById(id);
+             return loggedinUser;
+        } else {
+
+           throw new InformationNotFoundException("Can't delete user that isn't assigned to you");
+        }
+    }
 }
