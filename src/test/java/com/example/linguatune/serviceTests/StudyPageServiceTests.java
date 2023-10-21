@@ -56,7 +56,7 @@ public class StudyPageServiceTests {
     @BeforeEach
     public void setUp(){
         MockitoAnnotations.openMocks(this);
-        studyPageServiceMock = new StudyPageService(userService, studyPageRepository);
+        studyPageServiceMock = new StudyPageService(userService, studyPageRepository, languageRepository);
         
 
 
@@ -92,9 +92,9 @@ public class StudyPageServiceTests {
 
     @Test 
     public void testCreateStudyPage(){
-    when(languageRepository.findById(1L)).thenReturn(Optional.ofNullable(eng));
+    when(languageRepository.findByName("English")).thenReturn(eng);
     when(studyPageRepository.save(any(StudyPage.class))).thenReturn(studyPage);
-    StudyPage result = studyPageServiceMock.createStudyPage(studyPage);
+    StudyPage result = studyPageServiceMock.createStudyPage("English");
     assertEquals(result.getUser().getEmailAddress(), user.getEmailAddress());
 
     }

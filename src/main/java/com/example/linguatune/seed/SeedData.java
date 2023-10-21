@@ -50,7 +50,7 @@ public class SeedData implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         Language English = new Language();
-        English.setLanguageCode("en");
+        English.setLanguageCode("eng");
         English.setName("English");
         English = languageRepository.save(English);
 
