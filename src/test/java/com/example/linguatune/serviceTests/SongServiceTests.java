@@ -1,8 +1,12 @@
 package com.example.linguatune.serviceTests;
 
+import com.example.linguatune.exceptions.InformationNotFoundException;
 import com.example.linguatune.model.*;
 import com.example.linguatune.repository.SongRepository;
+import com.example.linguatune.service.SongService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -10,6 +14,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Optional;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class SongServiceTests {
@@ -30,6 +40,22 @@ public class SongServiceTests {
         studyPage = new StudyPage(2L, new User(), new Language(), new HashSet<>(), "mmmm,kkk");
     }
 
+    @Test
+    public void testGetSongById(){
+        when(songRepository.findById(anyLong())).thenReturn(Optional.of(song));
+        Song result = songService.getSongById(6L);
+        assertEquals(result.getId(), song.getId());
+    }
 
+    @Test
+    public void testGetSongFail(){
+        when(songRepository.findById(anyLong())).thenReturn(Optional.empty());
+        assertThrows(InformationNotFoundException.class, ()->{
+            songService.getSongById(6L);
+
+        });
+
+
+    }
 
 }

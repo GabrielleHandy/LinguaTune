@@ -85,7 +85,9 @@ public class StudyPage {
     public void setRecentSongs(String recentSongs) {
         this.recentSongs = recentSongs;
     }
-
+    public void addRecentSongs(String title){
+        this.recentSongs = this.recentSongs + "," + title;
+    }
 
     @Override
     public String toString() {
