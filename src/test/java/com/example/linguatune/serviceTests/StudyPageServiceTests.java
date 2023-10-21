@@ -1,6 +1,8 @@
 package com.example.linguatune.serviceTests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -17,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.example.linguatune.exceptions.InformationNotFoundException;
 import com.example.linguatune.model.Language;
 import com.example.linguatune.model.StudyPage;
 import com.example.linguatune.model.User;
@@ -49,7 +52,8 @@ public class StudyPageServiceTests {
     private static User user;
     private Language eng;
     private StudyPage studyPage;
-      @BeforeEach
+
+    @BeforeEach
     public void setUp(){
         MockitoAnnotations.openMocks(this);
         studyPageServiceMock = new StudyPageService(userService, studyPageRepository);
@@ -69,10 +73,30 @@ public class StudyPageServiceTests {
     }
 
 
-     @Test
+    @Test
     public void testfindStudyPageById(){
         when(studyPageRepository.findById(anyLong())).thenReturn(Optional.of(studyPage));
         assertEquals(studyPageServiceMock.findStudyPageById(1L).getId(), studyPage.getId());
+    }
+
+    @Test
+    public void testfindStudyPageByIdFail(){
+
+        when(studyPageRepository.findById(anyLong())).thenReturn(Optional.empty());
+        assertThrows(InformationNotFoundException.class, () -> {
+
+            studyPageServiceMock.findStudyPageById(1L);
+
+        });
+    }
+
+    @Test 
+    public void testCreateStudyPage(){
+    when(languageRepository.findById(1L)).thenReturn(Optional.ofNullable(eng));
+    when(studyPageRepository.save(any(StudyPage.class))).thenReturn(studyPage);
+    StudyPage result = studyPageServiceMock.createStudyPage(studyPage);
+    assertEquals(result.getUser().getEmailAddress(), user.getEmailAddress());
+
     }
 
 }
