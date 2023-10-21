@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -42,5 +43,13 @@ public class SongService {
         }
         throw new InformationNotFoundException("Song with Id " + l + " doesn't exist");
 
+    }
+
+    public List<Song> getSongsByArtist(String artist) {
+        List<Song> songs = songRepository.findAllByArtist(artist);
+        if(!songs.isEmpty()){
+            return songs;
+        }
+        throw new InformationNotFoundException("Can't find any songs by artist " + artist);
     }
 }
