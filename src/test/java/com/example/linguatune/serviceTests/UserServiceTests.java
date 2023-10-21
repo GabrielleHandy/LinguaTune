@@ -139,4 +139,14 @@ public class UserServiceTests {
         
 
     }
+    
+    @Test
+    public void testDeleteUser(){
+        when(userRepository.delete(any(User.class))).thenReturn(user);
+        User result = userServiceMock.deleteUser(1L);
+
+        assert(result.getUserName().equals(user.getUserName()));
+
+    }
+    
 }
