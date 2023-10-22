@@ -7,6 +7,7 @@ import com.example.linguatune.model.StudyPage;
 import com.example.linguatune.model.User;
 import com.example.linguatune.repository.FlashCardStackRepository;
 import com.example.linguatune.repository.LanguageRepository;
+import com.example.linguatune.repository.StudyPageRepository;
 import com.example.linguatune.repository.UserRepository;
 import com.example.linguatune.security.MyUserDetails;
 import com.example.linguatune.service.FlashCardStackService;
@@ -38,7 +39,8 @@ public class FlashCardStackServiceTests {
     @Mock
     FlashCardStackRepository flashCardStackRepository;
 
-
+    @Mock
+    StudyPageRepository studyPageRepository;
 
     @InjectMocks
     FlashCardStackService flashCardStackService;
@@ -74,6 +76,8 @@ public class FlashCardStackServiceTests {
         user = new User(1L, "LanguageLover", "test@test.com", eng, "111", new ArrayList<StudyPage>() );
         studyPage = new StudyPage(1L, user, spa, null, null);
         flashCardStack = new FlashCardStack(2L, "pop", studyPage, new ArrayList<>());
+
+
         updated = new FlashCardStack();
         updated.setTitle("Bloop");
 
@@ -105,6 +109,15 @@ public class FlashCardStackServiceTests {
         assertEquals(flashCardStackService.findByTitle("pop").getId(), flashCardStack.getId());
     }
 
+    @Test
+    public void testCreateFlashCardStack(){
+        when(studyPageRepository.findByIdAndUser(anyLong(), any())).thenReturn(studyPage);
+        when(flashCardStackRepository.findByTitleAndMadeBy(anyString(), any(StudyPage.class))).thenReturn(null);
+        when(flashCardStackRepository.save(any(FlashCardStack.class))).thenReturn(updated);
+        FlashCardStack result = flashCardStackService.createStack(updated, studyPage.getId());
+        assertEquals(result.getTitle(), "Bloop");
+
+    }
 
     
 }
