@@ -23,17 +23,23 @@ public class SecurityConfiguration {
 
 
 
-        @Bean
-        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-            http.authorizeRequests().antMatchers("/index.html", "/auth/users", "/auth/users/login", "/auth/users/register").permitAll()
-                    .antMatchers("/h2-console/**").permitAll()
-                    .anyRequest().authenticated()
-                    .and().sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and().csrf().disable()
-                    .headers().frameOptions().disable();
-            return http.build();
-        }
+    @Bean
+    public JWTRequestFilter authJwtRequestFilter() {
+        return new JWTRequestFilter();
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.authorizeRequests().antMatchers("/index.html", "/auth/users", "/auth/users/login/", "/auth/users/register/").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
+                .anyRequest().authenticated()
+                .and().sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().csrf().disable()
+                .headers().frameOptions().disable();
+        http.addFilterBefore(authJwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
         @Bean
         public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
             return authConfig.getAuthenticationManager();
