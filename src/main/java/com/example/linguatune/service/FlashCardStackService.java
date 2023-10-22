@@ -2,6 +2,7 @@ package com.example.linguatune.service;
 
 import com.example.linguatune.exceptions.AlreadyExistException;
 import com.example.linguatune.exceptions.InformationNotFoundException;
+import com.example.linguatune.model.FlashCard;
 import com.example.linguatune.model.FlashCardStack;
 import com.example.linguatune.model.StudyPage;
 import com.example.linguatune.model.User;
@@ -59,7 +60,7 @@ public class FlashCardStackService {
         throw new InformationNotFoundException("You don't have a study Page with id " + id);
     }
 
-    public FlashCardStack deleteStack(Long flashCardStackId, Long studyPageId) {
+    public FlashCardStack deleteStack(Long flashCardStackId, long studyPageId) {
         StudyPage optionalStudyPage = studyPageRepository.findByIdAndUser(studyPageId, loggedInUser);
         if(optionalStudyPage != null) {
             Optional<FlashCardStack> optionalFlashCardStack = Optional.ofNullable(flashCardStackRepository.findByIdAndMadeBy(flashCardStackId, optionalStudyPage));
