@@ -9,6 +9,7 @@ import com.example.linguatune.repository.FlashCardStackRepository;
 import com.example.linguatune.repository.LanguageRepository;
 import com.example.linguatune.repository.UserRepository;
 import com.example.linguatune.security.MyUserDetails;
+import com.example.linguatune.service.FlashCardStackService;
 import com.example.linguatune.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
