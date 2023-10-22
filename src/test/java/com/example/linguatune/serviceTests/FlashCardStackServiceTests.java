@@ -119,5 +119,15 @@ public class FlashCardStackServiceTests {
 
     }
 
+    @Test
+    public void testDeleteFlashCardStack(){
+        when(studyPageRepository.findByIdAndUser(anyLong(), any())).thenReturn(studyPage);
+        when(flashCardStackRepository.findByIdAndMadeBy(anyLong(), any(StudyPage.class))).thenReturn(flashCardStack);
+
+        FlashCardStack result = flashCardStackService.deleteStack(1L, studyPage.getId());
+        assertEquals(result.getTitle(), "pop");
+
+    }
+
     
 }

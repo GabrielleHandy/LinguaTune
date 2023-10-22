@@ -58,4 +58,18 @@ public class FlashCardStackService {
         }
         throw new InformationNotFoundException("You don't have a study Page with id " + id);
     }
+
+    public FlashCardStack deleteStack(Long flashCardStackId, Long studyPageId) {
+        StudyPage optionalStudyPage = studyPageRepository.findByIdAndUser(studyPageId, loggedInUser);
+        if(optionalStudyPage != null) {
+            Optional<FlashCardStack> optionalFlashCardStack = Optional.ofNullable(flashCardStackRepository.findByIdAndMadeBy(flashCardStackId, optionalStudyPage));
+            if (optionalFlashCardStack.isPresent()) {
+                flashCardStackRepository.deleteById(flashCardStackId);
+                return optionalFlashCardStack.get();
+            }
+            throw new InformationNotFoundException("Couldn't find FlashCardStack with Id " + flashCardStackId);
+        }
+        throw new InformationNotFoundException("You don't have a study Page with id " + studyPageId);
+
+    }
 }
