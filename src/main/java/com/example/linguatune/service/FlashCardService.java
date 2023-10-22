@@ -18,7 +18,7 @@ import java.util.Optional;
 public class FlashCardService {
     private FlashCardRepository flashCardRepository;
     private FlashCardStackRepository flashCardStackRepository;
-    private User loggedInUser;
+
 
     @Autowired
     public void setFlashCardRepository(FlashCardRepository flashCardRepository) {
