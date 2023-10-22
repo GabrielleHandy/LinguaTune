@@ -7,14 +7,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Component
 public class SeedData implements CommandLineRunner {
+
+    private Logger logger = Logger.getLogger(SeedData.class.getName());
     private final UserRepository userRepository;
 
     private final FlashCardRepository flashRepository;
@@ -45,7 +53,6 @@ public class SeedData implements CommandLineRunner {
     }
 
 
-
     @Override
     public void run(String... args) throws Exception {
 
@@ -57,7 +64,7 @@ public class SeedData implements CommandLineRunner {
         Language Spanish = new Language();
         Spanish.setLanguageCode("spa");
         Spanish.setName("Spanish");
-        Spanish=languageRepository.save(Spanish);
+        Spanish = languageRepository.save(Spanish);
 
         Language French = new Language();
         French.setLanguageCode("fr");
@@ -78,22 +85,10 @@ public class SeedData implements CommandLineRunner {
         testUserStudyPage = studyPageRepository.save(testUserStudyPage);
 
 
-        HashMap<String, String> danse = new HashMap<>();
-        danse.put("name", "Dernière danse");
-        danse.put("lyrics", "src/main/java/com/example/linguatune/lyrics/65uoaqX5qcjXZRheAj1qQT.json");
-        danse.put("artist", "Indila");
-        danse.put("image", "https://i.scdn.co/image/ab67616d0000b2734ae8ff731c49965bf2083405");
+        List<Song> songs = seedSongs();
 
-        List<Song> songs = objectMapper.readValue(new File("..\\LinguaTune\\src\\main\\java\\com\\example\\linguatune\\seed\\songs.json"), new TypeReference<List<Song>>(){});
 
-        songs = songRepository.saveAll(songs);
-        for(Song song: songs){
-            Translation engTrans = new Translation();
-            engTrans.setTranslation_lan(English);
-            engTrans.setTranslatedSong(song);
-            engTrans.setLines("..\\LinguaTune\\src\\main\\java\\com\\example\\linguatune\\translations\\english\\" + song.getUri()+ ".json");
-            translationRepository.save(engTrans);
-        }
+        seedTranslations(songs,English);
 
 
         FlashCardStack flashCardStack = new FlashCardStack();
@@ -107,5 +102,46 @@ public class SeedData implements CommandLineRunner {
         flashCard.setOriginalText("Danse");
         flashCard.setTranslatedText("Dance");
         flashRepository.save(flashCard);
+    }
+
+    private List<Song> seedSongs() {
+
+        List<Song> songs = new ArrayList<Song>();
+        try {
+            songs = objectMapper.readValue(new File("..\\LinguaTune\\src\\main\\java\\com\\example\\linguatune\\seed\\songs.json"), new TypeReference<List<Song>>() {
+            });
+
+            for (Song song : songs) {
+                // Specify the path to JSON file
+                ClassPathResource resource = new ClassPathResource("assests\\lyrics\\" + song.getUri() + ".json");
+
+                // Read the JSON data from the file
+                byte[] jsonData = FileCopyUtils.copyToByteArray(resource.getInputStream());
+
+                // Convert the JSON data to a string
+                String json = new String(jsonData, "UTF-8");
+                song.setLyrics(json);
+
+            }
+
+
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, e.getMessage());
+
+        }
+
+
+        return songRepository.saveAll(songs);
+    }
+    private void seedTranslations(List<Song> songs, Language language){
+        for(Song song : songs){
+
+            Translation translation = new Translation();
+            translation.setTranslation_lan(language);
+            translation.setTranslatedSong(song);
+            translation.setLines("..\\LinguaTune\\src\\main\\java\\com\\example\\linguatune\\assests\\translations\\english\\" + song.getUri() + ".json");
+            translationRepository.save(translation);
+
+        }
     }
 }

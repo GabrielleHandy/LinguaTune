@@ -38,7 +38,7 @@ public class SongServiceTests {
     @BeforeEach
     public void setUp(){
         songService.setSongRepository(songRepository);
-        song = new Song(2L, "test", "woop",new ArrayList<FlashCard>(), "1234","English", "link", new ArrayList<Translation>());
+        song = new Song(2L, "test", "woop",new ArrayList<FlashCard>(), "1234","English", "link", "flfllfl", new ArrayList<Translation>());
         studyPage = new StudyPage(2L, new User(), new Language(), new HashSet<>(), "mmmm,kkk");
     }
 

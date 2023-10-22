@@ -6,6 +6,7 @@ import com.example.linguatune.repository.LanguageRepository;
 import com.example.linguatune.repository.UserRepository;
 import com.example.linguatune.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,14 +18,22 @@ import java.util.Optional;
 public class UserService {
 
     private UserRepository userRepository;
-    @Autowired
+
     private LanguageRepository languageRepository;
-    @Autowired
+
     private  AuthenticationManager authenticationManager;
     private static User loggedinUser;
 
-    @Autowired
+
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public UserService(UserRepository userRepository, LanguageRepository languageRepository, @Lazy AuthenticationManager authenticationManager, @Lazy PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.languageRepository = languageRepository;
+        this.authenticationManager = authenticationManager;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {

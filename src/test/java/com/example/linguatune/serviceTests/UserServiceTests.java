@@ -79,7 +79,7 @@ public class UserServiceTests {
 
     @Test
     public void testGetUserById(){
-        when(userServiceMock.findById(anyLong())).thenReturn(user);
+        when(userRepository.findById(anyLong())).thenReturn(Optional.ofNullable(user));
         assertEquals(userServiceMock.findById(1L).getId(), user.getId());
     }
 
@@ -114,7 +114,6 @@ public class UserServiceTests {
         User updated = new User();
         updated.setUserName("Bloop");
 
-        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenReturn(updated);
         User result = userServiceMock.updateUser(1L, updated);
 

@@ -31,6 +31,8 @@ import javax.persistence.*;
         @Column
         private String uri;
 
+        @Lob
+        private String lyrics;
         @Column
         private String original_lan;
 
@@ -46,17 +48,19 @@ import javax.persistence.*;
     public Song() {
     }
 
-        public Song(Long id, String title, String artist, List<FlashCard> flashCards, String uri, String original_lan, String pictureLink, List<Translation> availableTrans) {
+        public Song(Long id, String title, String artist, List<FlashCard> flashCards, String uri, String lyrics, String original_lan, String pictureLink, List<Translation> availableTrans) {
             this.id = id;
             this.title = title;
             this.artist = artist;
             this.flashCards = flashCards;
             this.uri = uri;
+            this.lyrics = lyrics;
             this.original_lan = original_lan;
             this.pictureLink = pictureLink;
             this.availableTrans = availableTrans;
         }
-    public Long getId() {
+
+        public Long getId() {
         return id;
     }
 
@@ -112,9 +116,15 @@ import javax.persistence.*;
         this.availableTrans = availableTrans;
     }
 
+    public String getLyrics() {
+            return lyrics;
+        }
 
+    public void setLyrics(String lyrics) {
+            this.lyrics = lyrics;
+        }
 
-    public String getPictureLink() {
+        public String getPictureLink() {
         return pictureLink;
     }
 
