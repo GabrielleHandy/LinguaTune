@@ -24,6 +24,13 @@ public class LanguageService {
         this.languageRepository = languageRepository;
     }
 
+    /**
+     * Retrieve a language by its ID.
+     *
+     * @param l The ID of the language to retrieve.
+     * @return The Language with the specified ID.
+     * @throws InformationNotFoundException if no Language is found with the given ID.
+     */
     public Language getLanguageById(long l) {
         Optional<Language> optionalLanguage = languageRepository.findById(l);
         if(optionalLanguage.isPresent()){
@@ -33,6 +40,13 @@ public class LanguageService {
 
     }
 
+    /**
+     * Retrieve a language by its name.
+     *
+     * @param name The name of the language to retrieve.
+     * @return The Language with the specified name (case-insensitive).
+     * @throws InformationNotFoundException if no Language is found with the given name.
+     */
     public Language getLanguageByName(String name) {
         String nameUp = String.valueOf(name.charAt(0)).toUpperCase() + name.substring(1).toLowerCase();
         Optional<Language> languageOptional = Optional.ofNullable(languageRepository.findByName(nameUp));

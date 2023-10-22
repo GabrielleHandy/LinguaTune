@@ -31,69 +31,95 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-
-    public void setTestLoggedInUser(User user){
+    /**
+     * Set a test logged-in user (used for testing purposes).
+     *
+     * @param user The user to be set as the logged-in user.
+     */
+    public void setTestLoggedInUser(User user) {
         loggedinUser = user;
-
     }
 
+    /**
+     * Set the logged-in user based on the current security context.
+     */
     public void setLoggedInUser() {
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         loggedinUser = userDetails.getUser();
-        
     }
 
-    public User findById(Long id){
+    /**
+     * Find a user by their ID.
+     *
+     * @param id The ID of the user to retrieve.
+     * @return The user with the specified ID.
+     * @throws InformationNotFoundException if no user is found with the given ID.
+     */
+    public User findById(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
-        if(optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             return optionalUser.get();
         }
         throw new InformationNotFoundException("User does not exist");
     }
 
-    public User findByEmailAddress(String email){
+    /**
+     * Find a user by their email address.
+     *
+     * @param email The email address of the user to retrieve.
+     * @return The user with the specified email address.
+     */
+    public User findByEmailAddress(String email) {
         return userRepository.findByEmailAddress(email);
     }
 
+    /**
+     * Create a new user.
+     *
+     * @param user The user object to be created.
+     * @return The created user.
+     */
     public User createUser(User user) {
-        
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setNativeLanguage(languageRepository.findById(1L).get());
-
         return userRepository.save(user);
     }
 
+    /**
+     * Update a user's information.
+     *
+     * @param userId       The ID of the user to be updated.
+     * @param updatedUser  The updated user object.
+     * @return The updated user.
+     * @throws InformationNotFoundException if the user to update is not assigned to the logged-in user.
+     */
     public User updateUser(Long userId, User updatedUser) {
-        if(userId == loggedinUser.getId()){
-        
-            
-            
-                if(updatedUser.getUserName() != null){
-                    loggedinUser.setUserName(updatedUser.getUserName());
-
-                }
-                if(updatedUser.getPassword() != null){
-                    loggedinUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
-
-                }
-            
-           
-
+        if (userId == loggedinUser.getId()) {
+            if (updatedUser.getUserName() != null) {
+                loggedinUser.setUserName(updatedUser.getUserName());
+            }
+            if (updatedUser.getPassword() != null) {
+                loggedinUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+            }
             return userRepository.save(loggedinUser);
         } else {
-
-           throw new InformationNotFoundException("Can't updated user that isn't assigned to you");
+            throw new InformationNotFoundException("Can't update a user that isn't assigned to you");
         }
     }
 
-    public User deleteUser(Long id){
-         if(id == loggedinUser.getId()){
-
+    /**
+     * Delete a user.
+     *
+     * @param id The ID of the user to be deleted.
+     * @return The deleted user.
+     * @throws InformationNotFoundException if the user to delete is not assigned to the logged-in user.
+     */
+    public User deleteUser(Long id) {
+        if (id == loggedinUser.getId()) {
             userRepository.deleteById(id);
-             return loggedinUser;
+            return loggedinUser;
         } else {
-
-           throw new InformationNotFoundException("Can't delete user that isn't assigned to you");
+            throw new InformationNotFoundException("Can't delete a user that isn't assigned to you");
         }
     }
 }

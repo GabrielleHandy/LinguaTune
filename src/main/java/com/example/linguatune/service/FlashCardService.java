@@ -31,17 +31,31 @@ public class FlashCardService {
         this.flashCardStackRepository = flashCardStackRepository;
     }
 
-    public FlashCard findById(long l) {
-        Optional<FlashCard> optionalFlashCard = flashCardRepository.findById(l);
+    /**
+     * Retrieve a FlashCard by its ID.
+     *
+     * @param id The ID of the FlashCard to retrieve.
+     * @return The FlashCard with the specified ID.
+     * @throws InformationNotFoundException if no FlashCard is found with the given ID.
+     */
+    public FlashCard findById(long id) {
+        Optional<FlashCard> optionalFlashCard = flashCardRepository.findById(id);
 
         if(optionalFlashCard.isPresent()){
             return optionalFlashCard.get();
         }
-        throw new InformationNotFoundException("Couldn't find FlashCard with Id " + l);
+        throw new InformationNotFoundException("Couldn't find FlashCard with Id " + id);
     }
 
-
-
+    /**
+     * Create a new FlashCard and associate it with a FlashCard Stack.
+     *
+     * @param flashCardStackId The ID of the associated FlashCard Stack.
+     * @param flashCard        The FlashCard to create.
+     * @return The created FlashCard.
+     * @throws AlreadyExistException    if a FlashCard with the same original text already exists in the FlashCard Stack.
+     * @throws InformationNotFoundException if the specified FlashCard Stack is not found.
+     */
     public FlashCard createFlashCard(Long flashCardStackId, FlashCard flashCard) {
         Optional<FlashCardStack> optionalFlashCardStack = flashCardStackRepository.findById(flashCardStackId);
         if(optionalFlashCardStack.isPresent()) {
@@ -55,6 +69,14 @@ public class FlashCardService {
         throw new InformationNotFoundException("Cant find a FlashCard Stack with id " + flashCardStackId);
     }
 
+    /**
+     * Delete a FlashCard from a FlashCard Stack.
+     *
+     * @param flashCardStackId The ID of the associated FlashCard Stack.
+     * @param flashCardId      The ID of the FlashCard to delete.
+     * @return The deleted FlashCard.
+     * @throws InformationNotFoundException if the specified FlashCard or FlashCard Stack is not found.
+     */
     public FlashCard deleteFlashCard(Long flashCardStackId, Long flashCardId) {
         Optional<FlashCardStack> optionalFlashCardStack = flashCardStackRepository.findById(flashCardStackId);
         if(optionalFlashCardStack.isPresent()) {

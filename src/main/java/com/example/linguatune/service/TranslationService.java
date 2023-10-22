@@ -18,12 +18,20 @@ public class TranslationService {
         this.translationRepository = translationRepository;
     }
 
-    public Translation getTranslation(long id){
+    /**
+     * Retrieve a translation by its ID.
+     *
+     * @param id The ID of the translation to retrieve.
+     * @return The Translation with the specified ID.
+     * @throws InformationNotFoundException if no Translation is found with the given ID.
+     */
+    public Translation getTranslation(long id) {
         Optional<Translation> translation = translationRepository.findById(id);
 
-        if(translation.isPresent()){
+        if (translation.isPresent()) {
             return translation.get();
         }
-        throw new InformationNotFoundException("Translation with id " + id + " cant be found");
+        throw new InformationNotFoundException("Translation with id " + id + " can't be found");
     }
 }
+
