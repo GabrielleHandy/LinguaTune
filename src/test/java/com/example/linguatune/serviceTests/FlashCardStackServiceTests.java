@@ -98,5 +98,13 @@ public class FlashCardStackServiceTests {
         });
     }
 
+
+    @Test
+    public void testFindByTitle(){
+        when(flashCardStackRepository.findByTitle(anyString())).thenReturn(flashCardStack);
+        assertEquals(flashCardStackService.findByTitle("pop").getId(), flashCardStack.getId());
+    }
+
+
     
 }

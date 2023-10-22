@@ -27,6 +27,14 @@ public class FlashCardStackService {
         if(optionalFlashCardStack.isPresent()){
             return optionalFlashCardStack.get();
         }
-        throw new InformationNotFoundException("FlashCard with Id " + l);
+        throw new InformationNotFoundException("Couldn't find FlashCardStack with Id " + l);
+    }
+
+    public FlashCardStack findByTitle(String title) {
+        Optional<FlashCardStack> optionalFlashCardStack = Optional.ofNullable(flashCardStackRepository.findByTitle(title));
+        if(optionalFlashCardStack.isPresent()){
+            return optionalFlashCardStack.get();
+        }
+        throw new InformationNotFoundException("FlashCardStack with title " + title);
     }
 }

@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FlashCardStackRepository  extends JpaRepository<FlashCardStack, Long> {
+    FlashCardStack findByTitle(String s);
 }
