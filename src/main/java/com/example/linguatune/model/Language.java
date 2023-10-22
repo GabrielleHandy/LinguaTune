@@ -34,12 +34,6 @@ public class Language {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Song> songs;
 
-    @OneToMany(mappedBy = "nativeLanguage", orphanRemoval = true)
-    @Column
-    @JsonIgnore
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<User> users;
-
     @OneToMany(mappedBy = "translation_lan", orphanRemoval = true)
     @Column
     @JsonIgnore
@@ -49,13 +43,12 @@ public class Language {
     public Language() {
     }
 
-    public Language(Long id, String name, String languageCode, List<StudyPage> studyPages, List<Song> songs, List<User> users, List<Translation> translations) {
+    public Language(Long id, String name, String languageCode, List<StudyPage> studyPages, List<Song> songs, List<Translation> translations) {
         this.id = id;
         this.name = name;
         this.languageCode = languageCode;
         this.studyPages = studyPages;
         this.songs = songs;
-        this.users = users;
         this.translations = translations;
     }
 
@@ -102,14 +95,6 @@ public class Language {
         this.songs = songs;
     }
 
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
-
     public List<Translation> getTranslations() {
         return translations;
     }
@@ -126,7 +111,6 @@ public class Language {
                 ", languageCode='" + languageCode + '\'' +
                 ", studyPages=" + studyPages +
                 ", songs=" + songs +
-                ", users=" + users +
                 ", translations=" + translations +
                 '}';
     }

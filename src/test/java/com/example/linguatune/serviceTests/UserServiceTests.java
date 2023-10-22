@@ -73,7 +73,7 @@ public class UserServiceTests {
         eng.setId(1L);
 
 
-        user = new User(1L, "LanguageLover", "test@test.com", eng, "111", new ArrayList<StudyPage>() );
+        user = new User(1L, "LanguageLover", "test@test.com",  "111", new ArrayList<StudyPage>() );
         userServiceMock.setTestLoggedInUser(user);
     }
 

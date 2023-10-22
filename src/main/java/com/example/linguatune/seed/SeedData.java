@@ -7,14 +7,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,6 +26,7 @@ public class SeedData implements CommandLineRunner {
     private Logger logger = Logger.getLogger(SeedData.class.getName());
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
     private final FlashCardRepository flashRepository;
 
     private final FlashCardStackRepository flashCardStackRepository;
@@ -42,8 +44,9 @@ public class SeedData implements CommandLineRunner {
     String RAPID_KEY;
 
     @Autowired
-    public SeedData(UserRepository userRepository, FlashCardRepository flashRepository, FlashCardStackRepository flashCardStackRepository, LanguageRepository languageRepository, StudyPageRepository studyPageRepository, SongRepository songRepository, TranslationRepository translationRepository) {
+    public SeedData(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder, FlashCardRepository flashRepository, FlashCardStackRepository flashCardStackRepository, LanguageRepository languageRepository, StudyPageRepository studyPageRepository, SongRepository songRepository, TranslationRepository translationRepository) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
         this.flashRepository = flashRepository;
         this.flashCardStackRepository = flashCardStackRepository;
         this.languageRepository = languageRepository;
@@ -73,8 +76,7 @@ public class SeedData implements CommandLineRunner {
 
 
         User testUser = new User();
-        testUser.setNativeLanguage(English);
-        testUser.setPassword("111");
+        testUser.setPassword(passwordEncoder.encode("111"));
         testUser.setUserName("LanguageLover");
         testUser.setEmailAddress("test@test.com");
         testUser = userRepository.save(testUser);

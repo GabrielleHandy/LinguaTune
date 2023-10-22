@@ -73,7 +73,7 @@ public class FlashCardStackServiceTests {
         spa = new Language();
         spa.setId(2L);
         spa.setName("Spanish");
-        user = new User(1L, "LanguageLover", "test@test.com", eng, "111", new ArrayList<StudyPage>() );
+        user = new User(1L, "LanguageLover", "test@test.com", "111", new ArrayList<StudyPage>() );
         studyPage = new StudyPage(1L, user, spa, null, null);
         flashCardStack = new FlashCardStack(2L, "pop", studyPage, new ArrayList<>());
 

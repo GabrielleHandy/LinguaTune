@@ -2,12 +2,15 @@ package com.example.linguatune.service;
 
 import com.example.linguatune.exceptions.InformationNotFoundException;
 import com.example.linguatune.model.User;
+import com.example.linguatune.model.loginRequest.LoginRequest;
 import com.example.linguatune.repository.LanguageRepository;
 import com.example.linguatune.repository.UserRepository;
 import com.example.linguatune.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -90,7 +93,6 @@ public class UserService {
      */
     public User createUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setNativeLanguage(languageRepository.findById(1L).get());
         return userRepository.save(user);
     }
 
@@ -131,4 +133,25 @@ public class UserService {
             throw new InformationNotFoundException("Can't delete a user that isn't assigned to you");
         }
     }
+
+    /**
+     * Attempts to log in a user using the provided login credentials.
+     *
+     * @param loginRequest The login request containing the user's email address and password.
+     * @return true if the login is successful, false if login fails due to invalid credentials.
+     */
+    public Optional<User> loginUser(LoginRequest loginRequest){
+
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginRequest.getEmailAddress(), loginRequest.getPassword());
+        try{
+            Authentication authentication = authenticationManager.authenticate(authenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            MyUserDetails myUserDetails =  (MyUserDetails) authentication.getPrincipal();
+            return Optional.of(myUserDetails.getUser());
+        }catch (Exception e){
+            return Optional.empty();
+        }
+    }
+
+
 }
