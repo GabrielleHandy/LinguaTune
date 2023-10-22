@@ -26,7 +26,7 @@ public class Translation {
 
 
 
-    @Column
+    @Lob
     private String lines;
 
     public Translation() {

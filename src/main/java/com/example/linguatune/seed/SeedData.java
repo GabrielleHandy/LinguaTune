@@ -139,7 +139,23 @@ public class SeedData implements CommandLineRunner {
             Translation translation = new Translation();
             translation.setTranslation_lan(language);
             translation.setTranslatedSong(song);
-            translation.setLines("..\\LinguaTune\\src\\main\\java\\com\\example\\linguatune\\assests\\translations\\english\\" + song.getUri() + ".json");
+            try {
+
+                    // Specify the path to JSON file
+                    ClassPathResource resource = new ClassPathResource("assests\\translations\\english\\" + song.getUri() + ".json");
+
+                    // Read the JSON data from the file
+                    byte[] jsonData = FileCopyUtils.copyToByteArray(resource.getInputStream());
+
+                    // Convert the JSON data to a string
+                    String json = new String(jsonData, "UTF-8");
+                    translation.setLines(json);
+
+                } catch (IOException e) {
+            logger.log(Level.SEVERE, e.getMessage());
+
+        }
+
             translationRepository.save(translation);
 
         }
