@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -57,39 +58,47 @@ public class TranslationControllerTests {
 
     private String jwtKey;
 
+    @BeforeEach
+    public void setUser(){
 
-//    @Test
-//    public void createUser_success() throws Exception {
-//
-//
-//        when(userService.createUser(any(User.class))).thenReturn(testUser_2);
-//
-//        mockMvc.perform(MockMvcRequestBuilders.post("/auth/users/register")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(testUser_2)))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$", notNullValue()))
-//                .andExpect(jsonPath("$.message").value("Created successfully!"))
-//                .andExpect(jsonPath("$.data.userName").value(testUser_2.getUserName()))
-//                .andDo(print());
-//
-//    }
-//
-//    @Test
-//    public void createUser_fail() throws Exception {
-//
-//
-//        when(userService.createUser(any(User.class))).thenReturn(null);
-//
-//        mockMvc.perform(MockMvcRequestBuilders.post("/auth/users/register")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(testUser_2)))
-//                .andExpect(status().isConflict())
-//                .andExpect(jsonPath("$", notNullValue()))
-//                .andExpect(jsonPath("$.message").value("User already exists"))
-//                .andDo(print());
-//
-//    }
+        MyUserDetails userDetails = setup();
+        // Mock the behavior of myDoctorDetailsService to load the user details
+        when(myUserDetailsService.loadUserByUsername("gabby@ga")).thenReturn(userDetails);
+
+    }
+
+
+    @Test
+    @WithMockUser(username = "gabby@ga")
+    public void getTranslationById_success() throws Exception {
+
+        when(translationService.getTranslation(anyLong())).thenReturn(testTranslation);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/translation/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.message").value("success"))
+                .andExpect(jsonPath("$.data.lines").value(testTranslation.getLines()))
+                .andDo(print());
+
+    }
+    @Test
+    @WithMockUser(username = "gabby@ga")
+    public void getTranslationById_fail() throws Exception {
+
+        when(translationService.getTranslation(anyLong())).thenReturn(null);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/translation/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken()))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.message").value("Translation with id 1 not found"))
+                .andDo(print());
+
+    }
 
 
 
