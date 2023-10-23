@@ -179,6 +179,45 @@ public class StudyPageControllerTests {
 
     }
 
+    @Test
+    @WithMockUser(username = "gabby@ga")
+    public void deleteStudyPageById_success() throws Exception {
+
+        testStudyPage_1.getLanguage().setName("Spanish");
+
+        when(StudyPageService.deleteStudyPage(anyLong())).thenReturn(testStudyPage_1);
+
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/studypages/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.message").value("successfully deleted"))
+                .andExpect(jsonPath("$.data.language.name").value("Spanish"))
+                .andDo(print());
+
+    }
+
+    @Test
+    @WithMockUser(username = "gabby@ga")
+    public void deleteStudyPageById_fail() throws Exception {
+
+
+        when(StudyPageService.deleteStudyPage(any())).thenReturn(null);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/studypages/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken()))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.message").value("cannot delete study page with id 1"))
+                .andDo(print());
+
+    }
+
+
+
 
 
 
