@@ -1,7 +1,6 @@
 package com.example.linguatune.controller;
 
 import com.example.linguatune.model.StudyPage;
-import com.example.linguatune.model.User;
 import com.example.linguatune.service.StudyPageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

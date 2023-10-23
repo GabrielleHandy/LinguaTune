@@ -1,16 +1,15 @@
 package com.example.linguatune.serviceTests;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import com.example.linguatune.exceptions.AlreadyExistException;
+import com.example.linguatune.exceptions.InformationNotFoundException;
+import com.example.linguatune.model.Language;
+import com.example.linguatune.model.StudyPage;
+import com.example.linguatune.model.User;
+import com.example.linguatune.repository.LanguageRepository;
+import com.example.linguatune.repository.StudyPageRepository;
+import com.example.linguatune.repository.UserRepository;
+import com.example.linguatune.service.StudyPageService;
+import com.example.linguatune.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,18 +23,16 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.example.linguatune.exceptions.InformationNotFoundException;
-import com.example.linguatune.model.Language;
-import com.example.linguatune.model.StudyPage;
-import com.example.linguatune.model.User;
-import com.example.linguatune.repository.LanguageRepository;
-import com.example.linguatune.repository.StudyPageRepository;
-import com.example.linguatune.repository.UserRepository;
-import com.example.linguatune.security.MyUserDetails;
-import com.example.linguatune.service.StudyPageService;
-import com.example.linguatune.service.UserService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)

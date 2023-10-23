@@ -6,7 +6,6 @@ import com.example.linguatune.model.User;
 import com.example.linguatune.security.MyUserDetails;
 import com.example.linguatune.security.MyUserDetailsService;
 import com.example.linguatune.service.TranslationService;
-import com.example.linguatune.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -27,7 +26,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.Date;
 
 import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

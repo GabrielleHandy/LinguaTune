@@ -1,10 +1,8 @@
 package com.example.linguatune.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.util.Map;
 
 @Entity
 @Table(name = "translations")

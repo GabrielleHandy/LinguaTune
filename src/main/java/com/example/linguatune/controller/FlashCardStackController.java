@@ -1,9 +1,7 @@
 package com.example.linguatune.controller;
 
 import com.example.linguatune.model.FlashCardStack;
-import com.example.linguatune.model.StudyPage;
 import com.example.linguatune.service.FlashCardStackService;
-import com.example.linguatune.service.StudyPageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

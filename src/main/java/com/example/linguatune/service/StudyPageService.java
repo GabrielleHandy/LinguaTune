@@ -1,11 +1,5 @@
 package com.example.linguatune.service;
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-
 import com.example.linguatune.exceptions.AlreadyExistException;
 import com.example.linguatune.exceptions.InformationNotFoundException;
 import com.example.linguatune.model.Language;
@@ -14,6 +8,11 @@ import com.example.linguatune.model.User;
 import com.example.linguatune.repository.LanguageRepository;
 import com.example.linguatune.repository.StudyPageRepository;
 import com.example.linguatune.security.MyUserDetails;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class StudyPageService {

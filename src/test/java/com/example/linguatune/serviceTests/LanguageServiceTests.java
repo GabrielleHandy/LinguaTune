@@ -1,11 +1,9 @@
 package com.example.linguatune.serviceTests;
 
-import com.example.linguatune.exceptions.InformationNotFoundException;
-import com.example.linguatune.model.*;
+import com.example.linguatune.model.Language;
+import com.example.linguatune.model.StudyPage;
 import com.example.linguatune.repository.LanguageRepository;
-import com.example.linguatune.repository.SongRepository;
 import com.example.linguatune.service.LanguageService;
-import com.example.linguatune.service.SongService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,12 +12,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;

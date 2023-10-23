@@ -2,17 +2,13 @@ package com.example.linguatune.service;
 
 import com.example.linguatune.exceptions.AlreadyExistException;
 import com.example.linguatune.exceptions.InformationNotFoundException;
-import com.example.linguatune.model.FlashCard;
 import com.example.linguatune.model.FlashCardStack;
 import com.example.linguatune.model.StudyPage;
 import com.example.linguatune.model.User;
-import com.example.linguatune.repository.FlashCardRepository;
 import com.example.linguatune.repository.FlashCardStackRepository;
 import com.example.linguatune.repository.StudyPageRepository;
 import com.example.linguatune.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -35,16 +31,6 @@ public class FlashCardStackService {
     }
 
 
-    /**
-     * Set the logged-in user for tests.
-     *
-     * @param user The user to set as the logged-in user.
-     *
-     */
-    public void setTestLoggedInUser(User user) {
-        loggedInUser = user;
-
-    }
 
     /**
      * Set the logged-in user based on the current security context.

@@ -1,6 +1,7 @@
 package com.example.linguatune.controllerTests;
 
-import com.example.linguatune.model.*;
+import com.example.linguatune.model.Language;
+import com.example.linguatune.model.User;
 import com.example.linguatune.security.MyUserDetails;
 import com.example.linguatune.security.MyUserDetailsService;
 import com.example.linguatune.service.LanguageService;
@@ -27,7 +28,6 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;

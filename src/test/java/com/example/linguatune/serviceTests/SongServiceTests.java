@@ -4,7 +4,6 @@ import com.example.linguatune.exceptions.InformationNotFoundException;
 import com.example.linguatune.model.*;
 import com.example.linguatune.repository.SongRepository;
 import com.example.linguatune.service.SongService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

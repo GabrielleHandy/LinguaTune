@@ -2,14 +2,11 @@ package com.example.linguatune.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import net.bytebuddy.build.ToStringPlugin;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
-import javax.persistence.Column;
-import javax.persistence.OneToMany;
-import java.util.List;
 import javax.persistence.*;
+import java.util.List;
 
     @Entity
     @Table(name = "songs")

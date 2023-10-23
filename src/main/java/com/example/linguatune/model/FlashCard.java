@@ -1,7 +1,5 @@
 package com.example.linguatune.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 
 @Entity

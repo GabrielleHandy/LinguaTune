@@ -1,9 +1,7 @@
 package com.example.linguatune.controller;
 
 import com.example.linguatune.model.Song;
-import com.example.linguatune.model.Translation;
 import com.example.linguatune.service.SongService;
-import com.example.linguatune.service.TranslationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
