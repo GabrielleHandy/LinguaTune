@@ -99,6 +99,38 @@ public class TranslationControllerTests {
                 .andDo(print());
 
     }
+    @Test
+    @WithMockUser(username = "gabby@ga")
+    public void getTranslationBySongId_success() throws Exception {
+
+        when(translationService.getTranslationBySong(anyLong())).thenReturn(testTranslation);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/translations/song/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.message").value("Success"))
+                .andExpect(jsonPath("$.data.lines").value(testTranslation.getLines()))
+                .andDo(print());
+
+    }
+    @Test
+    @WithMockUser(username = "gabby@ga")
+    public void getTranslationBySongId_fail() throws Exception {
+
+        when(translationService.getTranslation(anyLong())).thenReturn(null);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/translations/song/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken()))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.message").value("Translation for song with id 1 not found"))
+                .andDo(print());
+
+    }
+
 
 
 
