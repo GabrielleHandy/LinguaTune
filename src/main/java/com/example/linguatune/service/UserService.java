@@ -5,6 +5,7 @@ import com.example.linguatune.model.User;
 import com.example.linguatune.model.loginRequest.LoginRequest;
 import com.example.linguatune.repository.LanguageRepository;
 import com.example.linguatune.repository.UserRepository;
+import com.example.linguatune.security.JWTUtils;
 import com.example.linguatune.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -24,6 +25,7 @@ public class UserService {
 
     private LanguageRepository languageRepository;
 
+    private final JWTUtils jwtUtils;
     private  AuthenticationManager authenticationManager;
     private static User loggedinUser;
 
@@ -31,9 +33,10 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, LanguageRepository languageRepository, @Lazy AuthenticationManager authenticationManager, @Lazy PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, LanguageRepository languageRepository, JWTUtils jwtUtils, @Lazy AuthenticationManager authenticationManager, @Lazy PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.languageRepository = languageRepository;
+        this.jwtUtils = jwtUtils;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
     }
@@ -105,6 +108,7 @@ public class UserService {
      * @throws InformationNotFoundException if the user to update is not assigned to the logged-in user.
      */
     public User updateUser(Long userId, User updatedUser) {
+        setLoggedInUser();
         if (userId == loggedinUser.getId()) {
             if (updatedUser.getUserName() != null) {
                 loggedinUser.setUserName(updatedUser.getUserName());
@@ -126,6 +130,7 @@ public class UserService {
      * @throws InformationNotFoundException if the user to delete is not assigned to the logged-in user.
      */
     public User deleteUser(Long id) {
+        setLoggedInUser();
         if (id == loggedinUser.getId()) {
             userRepository.deleteById(id);
             return loggedinUser;
@@ -140,14 +145,15 @@ public class UserService {
      * @param loginRequest The login request containing the user's email address and password.
      * @return true if the login is successful, false if login fails due to invalid credentials.
      */
-    public Optional<User> loginUser(LoginRequest loginRequest){
+    public Optional<String> loginUser(LoginRequest loginRequest){
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginRequest.getEmailAddress(), loginRequest.getPassword());
         try{
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             MyUserDetails myUserDetails =  (MyUserDetails) authentication.getPrincipal();
-            return Optional.of(myUserDetails.getUser());
+
+            return Optional.of(jwtUtils.generateJwtToken(myUserDetails));
         }catch (Exception e){
             return Optional.empty();
         }

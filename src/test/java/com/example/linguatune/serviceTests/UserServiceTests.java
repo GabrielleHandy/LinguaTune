@@ -6,7 +6,6 @@ import com.example.linguatune.model.StudyPage;
 import com.example.linguatune.model.User;
 import com.example.linguatune.repository.LanguageRepository;
 import com.example.linguatune.repository.UserRepository;
-import com.example.linguatune.security.MyUserDetails;
 import com.example.linguatune.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,18 +14,23 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
-
+@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTests {
 
@@ -39,22 +43,20 @@ public class UserServiceTests {
     @InjectMocks
     UserService userServiceMock;
 
-    @Mock
-    MyUserDetails myUserDetails;
+
     @Mock
     PasswordEncoder passwordEncoder;
     @Mock
     LanguageRepository languageRepository;
 
-    @Mock
-    SecurityContextHolder securityContextHolder;
 
 
 
+    @Autowired
+    AuthenticationManager authenticationManager;
 
 
 
-    public  UsernamePasswordAuthenticationToken authentication;
     private static User user;
     private Language eng;
 
@@ -74,7 +76,7 @@ public class UserServiceTests {
 
 
         user = new User(1L, "LanguageLover", "test@test.com",  "111", new ArrayList<StudyPage>() );
-        userServiceMock.setTestLoggedInUser(user);
+        loginUser();
     }
 
     @Test
@@ -102,7 +104,6 @@ public class UserServiceTests {
 
     @Test
     public void testCreateUser(){
-    when(languageRepository.findById(1L)).thenReturn(Optional.ofNullable(eng));
     when(userRepository.save(any(User.class))).thenReturn(user);
     User result = userServiceMock.createUser(user);
     assertEquals(result.getEmailAddress(), user.getEmailAddress());
@@ -110,20 +111,21 @@ public class UserServiceTests {
     }
     @Test
     public void testUpdateUser(){
-        
+        userServiceMock.setTestLoggedInUser(user);
         User updated = new User();
         updated.setUserName("Bloop");
 
         when(userRepository.save(any(User.class))).thenReturn(updated);
         User result = userServiceMock.updateUser(1L, updated);
 
-        assert(result.getUserName().equals(user.getUserName()));
+        assert(!result.getUserName().equals(user.getUserName()));
 
     }
 
     @Test
+
     public void testUpdateUserFail(){
-        
+        loginUser();
         User updated = new User();
         
         
@@ -145,6 +147,15 @@ public class UserServiceTests {
         User result = userServiceMock.deleteUser(1L);
 
         assert(result.getUserName().equals(user.getUserName()));
+
+    }
+
+    private void loginUser() {
+
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("test@test", "1111");
+
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
     }
     

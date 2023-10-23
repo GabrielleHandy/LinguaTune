@@ -51,7 +51,7 @@ public class FlashCardServiceTests {
     @BeforeEach
     public void setUp(){
 
-        user = new User(1L, "LanguageLover", "test@test.com", new Language(), "111", new ArrayList<StudyPage>() );
+        user = new User(1L, "LanguageLover", "test@test.com", "111", new ArrayList<StudyPage>() );
         studyPage = new StudyPage(1L, user, new Language(), null, null);
         flashCardStack = new FlashCardStack(2L, "pop", studyPage, new ArrayList<>());
         flashCard = new FlashCard(3L, flashCardStack, new Song(), "woop", "translatedWoop");

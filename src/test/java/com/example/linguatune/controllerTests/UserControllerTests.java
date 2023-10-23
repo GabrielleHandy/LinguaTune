@@ -2,14 +2,18 @@ package com.example.linguatune.controllerTests;
 
 import com.example.linguatune.controller.UserController;
 import com.example.linguatune.model.User;
+import com.example.linguatune.security.JWTUtils;
+import com.example.linguatune.security.MyUserDetailsService;
 import com.example.linguatune.security.SecurityConfiguration;
 import com.example.linguatune.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
@@ -35,8 +39,10 @@ public class UserControllerTests {
 
     @MockBean
     UserService userService;
-
-
+    @MockBean
+    JWTUtils jwtUtils;
+    @MockBean
+    MyUserDetailsService myUserDetailsService;
 
     @Autowired
     WebApplicationContext context;
@@ -63,11 +69,12 @@ public class UserControllerTests {
 
 
     @Test
-    @WithMockUser(username = "test2@")
+    @WithMockUser(username = "test@test", password = "1111")
     public void getUser_success() throws Exception {
 
         when(userService.findById(anyLong())).thenReturn(testUser_1);
         mockMvc.perform(get("/auth/users/{id}", "1")
+                        .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QiLCJpYXQiOjE2OTgwMjgwMTYsImV4cCI6MTY5ODg5MjAxNn0.LghHat-PudEWpbzwq5vKF2WWGmkvx2lP_BNJJ4wFHmM")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.id").value(testUser_1.getId()))

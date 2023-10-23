@@ -37,7 +37,7 @@ public class LanguageServiceTests {
     private Language language;
     @BeforeEach
     public void setUp(){
-        language = new Language(2L, "en", "en",new ArrayList<StudyPage>(),new ArrayList<Song>(),null, null );
+        language = new Language(2L, "en", "en",new ArrayList<StudyPage>(),null );
     }
 
     @Test

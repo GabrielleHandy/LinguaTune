@@ -37,11 +37,9 @@ public class SeedData implements CommandLineRunner {
     private final SongRepository songRepository;
     private ObjectMapper objectMapper = new ObjectMapper();
     private final TranslationRepository translationRepository;
-    private File updatedFrench = new File("C:\\Users\\gehan\\Desktop\\unit2\\Projects\\LinguaTune\\src\\main\\java\\com\\example\\linguatune\\seed\\frenchSongsUpdated.json");
 
 
-    @Value("rapidKey")
-    String RAPID_KEY;
+
 
     @Autowired
     public SeedData(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder, FlashCardRepository flashRepository, FlashCardStackRepository flashCardStackRepository, LanguageRepository languageRepository, StudyPageRepository studyPageRepository, SongRepository songRepository, TranslationRepository translationRepository) {
@@ -76,9 +74,9 @@ public class SeedData implements CommandLineRunner {
 
 
         User testUser = new User();
-        testUser.setPassword(passwordEncoder.encode("111"));
+        testUser.setPassword(passwordEncoder.encode("1111"));
         testUser.setUserName("LanguageLover");
-        testUser.setEmailAddress("test@test.com");
+        testUser.setEmailAddress("test@test");
         testUser = userRepository.save(testUser);
 
         StudyPage testUserStudyPage = new StudyPage();
@@ -114,6 +112,7 @@ public class SeedData implements CommandLineRunner {
             });
 
             for (Song song : songs) {
+
                 // Specify the path to JSON file
                 ClassPathResource resource = new ClassPathResource("assests\\lyrics\\" + song.getUri() + ".json");
 

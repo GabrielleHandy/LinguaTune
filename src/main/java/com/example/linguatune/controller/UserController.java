@@ -25,7 +25,7 @@ private UserService userService;
 
 @PostMapping(path = "/login")
 public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest){
-    Optional<User> userOptional =userService.loginUser(loginRequest);
+    Optional<String> userOptional =userService.loginUser(loginRequest);
     if(userOptional.isPresent()){
         result.put("message", "Successfully logged in!");
         result.put("data", userOptional.get());
@@ -51,9 +51,9 @@ public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest){
 
 
 
-@GetMapping(path = "/{id}")
-public ResponseEntity<?> getUserById(@PathVariable(value = "id") Long id){
-    Optional<User> userOptional = Optional.ofNullable(userService.findById(id));
+@PutMapping(path = "/{id}")
+public ResponseEntity<?> getUserById(@RequestBody User user, @PathVariable (value = "id") Long id){
+    Optional<User> userOptional = Optional.ofNullable(userService.updateUser(id, user));
     if (userOptional.isPresent()) {
         result.put("message", "success");
         result.put("data", userOptional.get());

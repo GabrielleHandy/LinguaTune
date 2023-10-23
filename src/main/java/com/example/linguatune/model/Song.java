@@ -2,6 +2,7 @@ package com.example.linguatune.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import net.bytebuddy.build.ToStringPlugin;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -33,6 +34,7 @@ import javax.persistence.*;
 
         @Lob
         private String lyrics;
+
         @Column
         private String original_lan;
 
