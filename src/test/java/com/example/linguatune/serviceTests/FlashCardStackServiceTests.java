@@ -19,7 +19,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -31,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
-
+@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class FlashCardStackServiceTests {
 
@@ -46,7 +50,8 @@ public class FlashCardStackServiceTests {
     FlashCardStackService flashCardStackService;
 
 
-
+    @Autowired
+    AuthenticationManager authenticationManager;
 
 
 
@@ -80,7 +85,7 @@ public class FlashCardStackServiceTests {
 
         updated = new FlashCardStack();
         updated.setTitle("Bloop");
-
+    loginUser();
 
 
     }
@@ -102,13 +107,6 @@ public class FlashCardStackServiceTests {
         });
     }
 
-
-    @Test
-    public void testFindByTitle(){
-        when(flashCardStackRepository.findByTitle(anyString())).thenReturn(flashCardStack);
-        assertEquals(flashCardStackService.findByTitle("pop").getId(), flashCardStack.getId());
-    }
-
     @Test
     public void testCreateFlashCardStack(){
         when(studyPageRepository.findByIdAndUser(anyLong(), any())).thenReturn(studyPage);
@@ -121,11 +119,21 @@ public class FlashCardStackServiceTests {
 
     @Test
     public void testDeleteFlashCardStack(){
-        when(studyPageRepository.findByIdAndUser(anyLong(), any())).thenReturn(studyPage);
-        when(flashCardStackRepository.findByIdAndMadeBy(anyLong(), any(StudyPage.class))).thenReturn(flashCardStack);
+        MyUserDetails myUserDetails = (MyUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        StudyPage studyPage1 = myUserDetails.getUser().getStudyPages().get(0);
+        when(flashCardStackRepository.findById(anyLong())).thenReturn(studyPage1.getFlashcardStacks().stream().findFirst());
 
-        FlashCardStack result = flashCardStackService.deleteStack(1L, studyPage.getId());
-        assertEquals(result.getTitle(), "pop");
+        FlashCardStack result = flashCardStackService.deleteStack(1L);
+        assertEquals(result.getTitle(), "French Fun");
+
+    }
+
+    private void loginUser() {
+
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("test@test", "1111");
+
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
     }
 

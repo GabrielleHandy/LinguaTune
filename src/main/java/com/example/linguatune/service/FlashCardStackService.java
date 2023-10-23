@@ -11,6 +11,8 @@ import com.example.linguatune.repository.FlashCardStackRepository;
 import com.example.linguatune.repository.StudyPageRepository;
 import com.example.linguatune.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -70,21 +72,6 @@ public class FlashCardStackService {
     }
 
     /**
-     * Retrieve a FlashCardStack by its title.
-     *
-     * @param title The title of the FlashCardStack to retrieve.
-     * @return The FlashCardStack with the specified title.
-     * @throws InformationNotFoundException if no FlashCardStack is found with the given title.
-     */
-    public FlashCardStack findByTitle(String title) {
-        Optional<FlashCardStack> optionalFlashCardStack = Optional.ofNullable(flashCardStackRepository.findByTitle(title));
-        if(optionalFlashCardStack.isPresent()){
-            return optionalFlashCardStack.get();
-        }
-        throw new InformationNotFoundException("FlashCardStack with title " + title);
-    }
-
-    /**
      * Create a new FlashCardStack associated with a study page.
      *
      * @param flashCardStack The FlashCardStack to create.
@@ -94,10 +81,14 @@ public class FlashCardStackService {
      * @throws InformationNotFoundException if the specified study page is not found.
      */
     public FlashCardStack createStack(FlashCardStack flashCardStack, Long id) {
+        setLoggedInUser();
         StudyPage optionalStudyPage = studyPageRepository.findByIdAndUser(id, loggedInUser);
         if(optionalStudyPage != null) {
             Optional<FlashCardStack> optionalFlashCardStack = Optional.ofNullable(flashCardStackRepository.findByTitleAndMadeBy(flashCardStack.getTitle(), optionalStudyPage));
             if (optionalFlashCardStack.isEmpty()) {
+                if(flashCardStack.getTitle() == null){
+                    flashCardStack.setTitle("Stack " + (optionalStudyPage.getFlashcardStacks().size() + 1));
+                }
                 flashCardStack.setMadeBy(optionalStudyPage);
                 return flashCardStackRepository.save(flashCardStack);
             }
@@ -110,21 +101,27 @@ public class FlashCardStackService {
      * Delete a FlashCardStack from a study page.
      *
      * @param flashCardStackId The ID of the FlashCardStack to delete.
-     * @param studyPageId      The ID of the associated study page.
      * @return The deleted FlashCardStack.
      * @throws InformationNotFoundException if the specified FlashCardStack or study page is not found.
      */
-    public FlashCardStack deleteStack(Long flashCardStackId, long studyPageId) {
-        StudyPage optionalStudyPage = studyPageRepository.findByIdAndUser(studyPageId, loggedInUser);
-        if(optionalStudyPage != null) {
-            Optional<FlashCardStack> optionalFlashCardStack = Optional.ofNullable(flashCardStackRepository.findByIdAndMadeBy(flashCardStackId, optionalStudyPage));
-            if (optionalFlashCardStack.isPresent()) {
+    public FlashCardStack deleteStack(Long flashCardStackId) {
+        setLoggedInUser();
+        Optional<FlashCardStack> flashCardStackOptional = flashCardStackRepository.findById(flashCardStackId);
+        if(flashCardStackOptional.isPresent()){
+            if(loggedInUser.getStudyPages().contains(flashCardStackOptional.get().getMadeBy())){
                 flashCardStackRepository.deleteById(flashCardStackId);
-                return optionalFlashCardStack.get();
-            }
-            throw new InformationNotFoundException("Couldn't find FlashCardStack with Id " + flashCardStackId);
-        }
-        throw new InformationNotFoundException("You don't have a study Page with id " + studyPageId);
+                return flashCardStackOptional.get();
 
-    }
+            } throw new InformationNotFoundException("FlashCardStack with Id " + flashCardStackId+ " doesn't belong to you");
+        }
+
+        throw new InformationNotFoundException("Couldn't find FlashCardStack with Id " + flashCardStackId);
+
+
+
+        }
+
+
+
+
 }
