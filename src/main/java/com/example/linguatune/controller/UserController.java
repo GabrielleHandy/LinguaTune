@@ -37,7 +37,7 @@ public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest){
 }
 
     @PostMapping(path = "/register")
-    public ResponseEntity<?> loginUser(@RequestBody User user){
+    public ResponseEntity<?> registerUser(@RequestBody User user){
         Optional<User> userOptional = Optional.ofNullable(userService.createUser(user));
         if(userOptional.isPresent()){
             result.put("message", "Created successfully!");
@@ -52,7 +52,7 @@ public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest){
 
 
 @PutMapping(path = "/{id}")
-public ResponseEntity<?> getUserById(@RequestBody User user, @PathVariable (value = "id") Long id){
+public ResponseEntity<?> updateUserInfo(@RequestBody User user, @PathVariable (value = "id") Long id){
     Optional<User> userOptional = Optional.ofNullable(userService.updateUser(id, user));
     if (userOptional.isPresent()) {
         result.put("message", "success");
@@ -65,7 +65,7 @@ public ResponseEntity<?> getUserById(@RequestBody User user, @PathVariable (valu
 }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable (value = "id") Long id){
+    public ResponseEntity<?> deleteUserById(@PathVariable (value = "id") Long id){
         Optional<User> userOptional = Optional.ofNullable(userService.deleteUser(id));
         if (userOptional.isPresent()) {
             result.put("message", "successfully deleted");

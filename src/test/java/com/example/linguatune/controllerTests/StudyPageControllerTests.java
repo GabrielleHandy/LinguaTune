@@ -151,7 +151,7 @@ public class StudyPageControllerTests {
         when(StudyPageService.findStudyPageById(anyLong())).thenReturn(testStudyPage_1);
 
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/studypages/1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/studypages/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken()))
                 .andExpect(status().isOk())
@@ -169,15 +169,18 @@ public class StudyPageControllerTests {
 
         when(StudyPageService.createStudyPage(anyString())).thenReturn(null);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/studypages/1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/studypages/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken()))
-                .andExpect(status().isConflict())
+                .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$", notNullValue()))
                 .andExpect(jsonPath("$.message").value("Study Page with id 1 not found"))
                 .andDo(print());
 
     }
+
+
+
 
 
 

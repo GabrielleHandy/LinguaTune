@@ -6,9 +6,7 @@ import com.example.linguatune.service.StudyPageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -35,7 +33,18 @@ public class StudyPageController {
     }
 
 
-
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<?> getUserById( @PathVariable (value = "id") Long id){
+        Optional<StudyPage> studyPageOptional = Optional.ofNullable(studyPageService.findStudyPageById(id));
+        if (studyPageOptional.isPresent()) {
+            result.put("message", "Success");
+            result.put("data", studyPageOptional.get());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } else {
+            result.put("message", "Study Page with id " +  id + " not found");
+            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        }
+    }
 
 
     private ResponseEntity<?> getResponseEntity(Optional<StudyPage> studyPageOptional) {
