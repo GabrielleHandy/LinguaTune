@@ -45,6 +45,18 @@ public class StudyPageController {
             return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
         }
     }
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<?> deleteUserById( @PathVariable (value = "id") Long id){
+        Optional<StudyPage> studyPageOptional = Optional.ofNullable(studyPageService.deleteStudyPage(id));
+        if (studyPageOptional.isPresent()) {
+            result.put("message", "successfully deleted");
+            result.put("data", studyPageOptional.get());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } else {
+            result.put("message", "cannot delete study page with id " + id);
+            return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
+        }
+    }
 
 
     private ResponseEntity<?> getResponseEntity(Optional<StudyPage> studyPageOptional) {

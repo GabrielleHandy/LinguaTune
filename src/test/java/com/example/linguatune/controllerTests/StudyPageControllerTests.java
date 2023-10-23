@@ -204,12 +204,12 @@ public class StudyPageControllerTests {
     public void deleteStudyPageById_fail() throws Exception {
 
 
-        when(StudyPageService.deleteStudyPage(any())).thenReturn(null);
+        when(StudyPageService.deleteStudyPage(anyLong())).thenReturn(null);
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/studypages/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken()))
-                .andExpect(status().isNotFound())
+                .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$", notNullValue()))
                 .andExpect(jsonPath("$.message").value("cannot delete study page with id 1"))
                 .andDo(print());
