@@ -18,6 +18,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -32,12 +37,15 @@ import com.example.linguatune.security.MyUserDetails;
 import com.example.linguatune.service.StudyPageService;
 import com.example.linguatune.service.UserService;
 
+@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class StudyPageServiceTests {
 
-    @Mock
+    @Autowired
     UserService userService;
 
+    @Autowired
+    UserRepository userRepository;
 
     @InjectMocks
     StudyPageService studyPageServiceMock;
@@ -49,11 +57,16 @@ public class StudyPageServiceTests {
     @Mock
     StudyPageRepository studyPageRepository;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     private static User user;
     private Language eng;
-    private Language spa;
+    private Language fre;
     private StudyPage studyPage;
     private List<StudyPage> pages;
+
+
 
     @BeforeEach
     public void setUp() {
@@ -66,18 +79,20 @@ public class StudyPageServiceTests {
         eng.setLanguageCode("en");
         eng.setId(1L);
 
-        spa = new Language();
-        spa.setId(2L);
-        spa.setName("Spanish");
+        fre = new Language();
+        fre.setId(2L);
+        fre.setName("French");
+
 
         pages = new ArrayList<StudyPage>();
 
         user = new User(1L, "LanguageLover", "test@test.com",  "111", new ArrayList<StudyPage>());
 
-        studyPage = new StudyPage(1L, user, spa, null, null);
+        studyPage = new StudyPage(1L, user, fre, null, null);
         user.setStudyPages(pages);
         pages.add(studyPage);
-        studyPageServiceMock.setTestLoggedInUser(user);
+
+        loginUser();
     }
 
 
@@ -110,11 +125,12 @@ public class StudyPageServiceTests {
     @Test
     public void testCreateStudyPageFail() {
 
-        when(languageRepository.findByName("Spanish")).thenReturn(spa);
+
+        when(languageRepository.findByName("French")).thenReturn(fre);
 
         assertThrows(AlreadyExistException.class, () -> {
 
-            studyPageServiceMock.createStudyPage("Spanish");
+            studyPageServiceMock.createStudyPage("French");
 
         });
 
@@ -124,13 +140,14 @@ public class StudyPageServiceTests {
     public void testDeleteStudyPage() {
         when(studyPageRepository.findByIdAndUser(anyLong(), any(User.class))).thenReturn(studyPage);
         StudyPage result = studyPageServiceMock.deleteStudyPage(1L);
-        assert(result.getLanguage().getName().equals(spa.getName()));
+        assert(result.getLanguage().getName().equals(fre.getName()));
 
     }
 
 
     @Test
     public void testDeleteStudyPageFail() {
+
         when(studyPageRepository.findByIdAndUser(anyLong(), any(User.class))).thenReturn(null);
 
         assertThrows(InformationNotFoundException.class, () -> {
@@ -138,6 +155,16 @@ public class StudyPageServiceTests {
             studyPageServiceMock.deleteStudyPage(1L);
 
         });
+    }
+
+    private void loginUser() {
+
+
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("test@test", "1111");
+
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
     }
 
 }

@@ -71,6 +71,7 @@ public class StudyPageService {
      * @throws AlreadyExistException if a study page for the same language already exists for the logged-in user.
      */
     public StudyPage createStudyPage(String language) {
+        setLoggedInUser();
         Language language1 = languageRepository.findByName(language);
         if (!loggedinUser.getStudyPages().stream().anyMatch(studyPage -> studyPage.getLanguage().getName().equals(language1.getName())))
         {
@@ -90,6 +91,7 @@ public class StudyPageService {
      * @throws InformationNotFoundException if no StudyPage is found with the given ID or if the logged-in user doesn't have a study page with that ID.
      */
     public StudyPage deleteStudyPage(long id) {
+        setLoggedInUser();
         Optional<StudyPage> studyPage = Optional.ofNullable(studyPageRepository.findByIdAndUser(id, loggedinUser));
         if (studyPage.isPresent()) {
             studyPageRepository.delete(studyPage.get());

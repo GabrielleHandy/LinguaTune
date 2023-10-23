@@ -93,7 +93,7 @@ public class StudyPage {
     public String toString() {
         return "StudyPage{" +
                 "id=" + id +
-                ", user=" + user +
+                ", user=" + user.getUserName() +
                 ", language=" + language +
                 ", flashcardStacks=" + flashcardStacks +
                 ", recentSongs='" + recentSongs + '\'' +

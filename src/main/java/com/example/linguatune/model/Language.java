@@ -95,8 +95,7 @@ public class Language {
         return "Language{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", languageCode='" + languageCode + '\'' +
-                ", studyPages=" + studyPages +
+                ", languageCode='" + languageCode + '\''  +
                 ", translations=" + translations +
                 '}';
     }
