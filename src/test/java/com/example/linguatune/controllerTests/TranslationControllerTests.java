@@ -74,12 +74,12 @@ public class TranslationControllerTests {
 
         when(translationService.getTranslation(anyLong())).thenReturn(testTranslation);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/translation/1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/translations/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$.message").value("success"))
+                .andExpect(jsonPath("$.message").value("Success"))
                 .andExpect(jsonPath("$.data.lines").value(testTranslation.getLines()))
                 .andDo(print());
 
@@ -90,7 +90,7 @@ public class TranslationControllerTests {
 
         when(translationService.getTranslation(anyLong())).thenReturn(null);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/translation/1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/translations/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken()))
                 .andExpect(status().isNotFound())
