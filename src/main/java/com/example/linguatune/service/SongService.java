@@ -63,6 +63,7 @@ public class SongService {
      * @throws InformationNotFoundException if no songs are found for the given artist.
      */
     public List<Song> getSongsByArtist(String artist) {
+        artist = String.valueOf(artist.charAt(0)).toUpperCase() + artist.substring(1).toLowerCase();
         List<Song> songs = songRepository.findAllByArtist(artist);
         if (!songs.isEmpty()) {
             return songs;

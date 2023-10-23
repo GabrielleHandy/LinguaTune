@@ -1,12 +1,10 @@
 package com.example.linguatune.controllerTests;
 
+import com.example.linguatune.model.*;
 import com.example.linguatune.model.Song;
-import com.example.linguatune.model.Translation;
-import com.example.linguatune.model.User;
 import com.example.linguatune.security.MyUserDetails;
 import com.example.linguatune.security.MyUserDetailsService;
-import com.example.linguatune.service.TranslationService;
-import com.example.linguatune.service.UserService;
+import com.example.linguatune.service.SongService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -24,11 +22,13 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -37,14 +37,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ComponentScan(basePackages = "com.example")
-public class TranslationControllerTests {
+public class SongControllerTests {
 
     @Autowired
     MockMvc mockMvc;
 
     @Autowired
     @MockBean
-    private TranslationService translationService;
+    private SongService SongService;
 
     @MockBean
     MyUserDetailsService myUserDetailsService;
@@ -53,80 +53,85 @@ public class TranslationControllerTests {
     @Autowired
     ObjectMapper objectMapper;
 
-    private Translation testTranslation = new Translation(1L, null, new Song(), "lines" );
+    private Song testSong = new Song(2L, "test", "woop",new ArrayList<FlashCard>(), "1234","English", "link", "flfllfl", new ArrayList<Translation>());
+    private Song testSong2 = new Song(3L, "testTest", "woop",new ArrayList<FlashCard>(), "1234","English", "link", "flfllfl", new ArrayList<Translation>());
 
+    private List<Song> songList = new ArrayList<>();
 
     private String jwtKey;
 
     @BeforeEach
-    public void setUser(){
+    public void setUp(){
 
         MyUserDetails userDetails = setup();
-        // Mock the behavior of myDoctorDetailsService to load the user details
+
         when(myUserDetailsService.loadUserByUsername("gabby@ga")).thenReturn(userDetails);
 
+        songList.add(testSong2);
+        songList.add(testSong);
+
     }
 
 
     @Test
     @WithMockUser(username = "gabby@ga")
-    public void getTranslationById_success() throws Exception {
+    public void getSongById_success() throws Exception {
 
-        when(translationService.getTranslation(anyLong())).thenReturn(testTranslation);
+        when(SongService.getSongById(anyLong())).thenReturn(testSong);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/translations/1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/songs/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()))
                 .andExpect(jsonPath("$.message").value("Success"))
-                .andExpect(jsonPath("$.data.lines").value(testTranslation.getLines()))
+                .andExpect(jsonPath("$.data.title").value(testSong.getTitle()))
                 .andDo(print());
 
     }
     @Test
     @WithMockUser(username = "gabby@ga")
-    public void getTranslationById_fail() throws Exception {
+    public void getSongById_fail() throws Exception {
 
-        when(translationService.getTranslation(anyLong())).thenReturn(null);
+        when(SongService.getSongById(anyLong())).thenReturn(null);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/translations/1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/songs/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken()))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$.message").value("Translation with id 1 not found"))
+                .andExpect(jsonPath("$.message").value("Song with id 1 not found"))
                 .andDo(print());
 
     }
     @Test
     @WithMockUser(username = "gabby@ga")
-    public void getTranslationBySongId_success() throws Exception {
+    public void getSongByArtist_success() throws Exception {
 
-        when(translationService.getTranslationBySong(anyLong())).thenReturn(testTranslation);
+        when(SongService.getSongsByArtist(anyString())).thenReturn(songList);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/translations/song/1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/songs/artist/Stromae")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()))
                 .andExpect(jsonPath("$.message").value("Success"))
-                .andExpect(jsonPath("$.data.lines").value(testTranslation.getLines()))
+                .andExpect(jsonPath("$.data[0].title").value(testSong2.getTitle()))
                 .andDo(print());
 
     }
     @Test
     @WithMockUser(username = "gabby@ga")
-    public void getTranslationBySongId_fail() throws Exception {
+    public void getSongByArtist_fail() throws Exception {
 
-        when(translationService.getTranslation(anyLong())).thenReturn(null);
+        when(SongService.getSongsByArtist(anyString())).thenReturn(null);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/translations/song/1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/songs/artist/Poppy")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken()))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$.message").value("Translation for song with id 1 not found"))
+                .andExpect(jsonPath("$.message").value("Can't find any songs by artist Poppy"))
                 .andDo(print());
 
     }
