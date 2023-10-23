@@ -64,4 +64,17 @@ public ResponseEntity<?> getUserById(@RequestBody User user, @PathVariable (valu
     }
 }
 
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable (value = "id") Long id){
+        Optional<User> userOptional = Optional.ofNullable(userService.deleteUser(id));
+        if (userOptional.isPresent()) {
+            result.put("message", "successfully deleted");
+            result.put("data", userOptional.get());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } else {
+            result.put("message", "cannot delete user with id " + id);
+            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        }
+    }
+
 }
