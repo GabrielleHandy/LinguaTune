@@ -34,5 +34,17 @@ public ResponseEntity<?> getTranslationById(@PathVariable(value = "id") Long id)
     return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 }
 
+    @GetMapping(path = "/song/{id}")
+    public ResponseEntity<?> getTranslationBySongId(@PathVariable(value = "id") Long id){
+        Optional<Translation> optionalTranslation = Optional.ofNullable(translationService.getTranslationBySong(id));
+        if(optionalTranslation.isPresent()){
+            result.put("message", "Success");
+            result.put("data", optionalTranslation.get());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        result.put("message", "Translation for song with id " +  id + " not found");
+        return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+    }
+
 
 }
