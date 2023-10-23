@@ -25,6 +25,20 @@ public class StudyPageController {
     @PostMapping(path = "/create/French")
     public ResponseEntity<?> createFrenchStudyPage() {
         Optional<StudyPage> studyPageOptional = Optional.ofNullable(studyPageService.createStudyPage("French"));
+        return getResponseEntity(studyPageOptional);
+    }
+
+    @PostMapping(path = "/create/Spanish")
+    public ResponseEntity<?> createSpanishStudyPage() {
+        Optional<StudyPage> studyPageOptional = Optional.ofNullable(studyPageService.createStudyPage("Spanish"));
+        return getResponseEntity(studyPageOptional);
+    }
+
+
+
+
+
+    private ResponseEntity<?> getResponseEntity(Optional<StudyPage> studyPageOptional) {
         if (studyPageOptional.isPresent()) {
             result.put("message", "Created successfully!");
             result.put("data", studyPageOptional.get());

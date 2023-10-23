@@ -73,9 +73,10 @@ public class StudyPageControllerTests {
     @Test
     @WithMockUser(username = "gabby@ga")
     public void createStudyPage_success() throws Exception {
-
+        testStudyPage_1.getLanguage().setName("French");
 
         when(StudyPageService.createStudyPage(anyString())).thenReturn(testStudyPage_1);
+
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/studypages/create/French/")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -83,7 +84,7 @@ public class StudyPageControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()))
                 .andExpect(jsonPath("$.message").value("Created successfully!"))
-                .andExpect(jsonPath("$.data.id").value(testStudyPage_1.getId()))
+                .andExpect(jsonPath("$.data.language.name").value("French"))
                 .andDo(print());
 
     }
@@ -104,6 +105,84 @@ public class StudyPageControllerTests {
                 .andDo(print());
 
     }
+
+    @Test
+    @WithMockUser(username = "gabby@ga")
+    public void createStudyPageSpanish_success() throws Exception {
+        testStudyPage_1.getLanguage().setName("Spanish");
+
+        when(StudyPageService.createStudyPage(anyString())).thenReturn(testStudyPage_1);
+
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/studypages/create/Spanish/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.message").value("Created successfully!"))
+                .andExpect(jsonPath("$.data.language.name").value("Spanish"))
+                .andDo(print());
+
+    }
+
+    @Test
+    @WithMockUser(username = "gabby@ga")
+    public void createStudyPageSpanish_fail() throws Exception {
+
+
+        when(StudyPageService.createStudyPage(anyString())).thenReturn(null);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/studypages/create/Spanish/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken()))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.message").value("StudyPage already exists"))
+                .andDo(print());
+
+    }
+
+    @Test
+    @WithMockUser(username = "gabby@ga")
+    public void getStudyPageById_success() throws Exception {
+
+        testStudyPage_1.getLanguage().setName("Spanish");
+
+        when(StudyPageService.findStudyPageById(anyLong())).thenReturn(testStudyPage_1);
+
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/studypages/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.message").value("Success"))
+                .andExpect(jsonPath("$.data.language.name").value("Spanish"))
+                .andDo(print());
+
+    }
+
+    @Test
+    @WithMockUser(username = "gabby@ga")
+    public void getStudyPageById_fail() throws Exception {
+
+
+        when(StudyPageService.createStudyPage(anyString())).thenReturn(null);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/studypages/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken()))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.message").value("Study Page with id 1 not found"))
+                .andDo(print());
+
+    }
+
+
+
+
+
 
 
 
