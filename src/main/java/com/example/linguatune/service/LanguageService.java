@@ -58,4 +58,7 @@ public class LanguageService {
     }
 
 
+    public List<Language> getLanguages() {
+        return languageRepository.findAll();
+    }
 }
