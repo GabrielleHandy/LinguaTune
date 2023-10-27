@@ -5,6 +5,8 @@ import com.example.linguatune.model.StudyPage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface FlashCardStackRepository  extends JpaRepository<FlashCardStack, Long> {
     FlashCardStack findByTitle(String s);
@@ -15,4 +17,5 @@ public interface FlashCardStackRepository  extends JpaRepository<FlashCardStack,
 
 FlashCardStack findByIdAndMadeBy(Long flashCardStackId, StudyPage optionalStudyPage);
 
+    List<FlashCardStack> findByMadeBy(StudyPage studyPage);
 }

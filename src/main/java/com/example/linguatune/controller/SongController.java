@@ -47,5 +47,30 @@ public ResponseEntity<?> getSongById(@PathVariable(value = "id") Long id){
         return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping(path = "/French")
+    public ResponseEntity<?> getFrenchSongs(){
+
+        Optional<List<Song>> optionalSongList = Optional.ofNullable(songService.getAllFrenchSongs());
+        if(optionalSongList.isPresent()){
+            result.put("message", "Success");
+            result.put("data", optionalSongList.get());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        result.put("message", "Can't find any songs French songs" );
+        return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+    }
+    @GetMapping(path = "/Spanish")
+    public ResponseEntity<?> getSpanishSongs(){
+
+        Optional<List<Song>> optionalSongList = Optional.ofNullable(songService.getAllSpanishSongs());
+        if(optionalSongList.isPresent()){
+            result.put("message", "Success");
+            result.put("data", optionalSongList.get());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        result.put("message", "Can't find any songs Spanish songs" );
+        return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+    }
+
 
 }

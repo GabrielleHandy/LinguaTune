@@ -70,4 +70,12 @@ public class SongService {
         }
         throw new InformationNotFoundException("Can't find any songs by artist " + artist);
     }
+
+    public List<Song> getAllFrenchSongs() {
+        return songRepository.findByOriginalLan("fr");
+    }
+
+    public List<Song> getAllSpanishSongs() {
+        return songRepository.findByOriginalLan("es");
+    }
 }

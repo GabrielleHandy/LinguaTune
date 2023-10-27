@@ -4,6 +4,7 @@ package com.example.linguatune.controller;
 import com.example.linguatune.model.User;
 import com.example.linguatune.model.loginRequest.LoginRequest;
 import com.example.linguatune.service.UserService;
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -79,7 +80,20 @@ public ResponseEntity<?> updateUserInfo(@RequestBody User user, @PathVariable (v
 
 
 
+@GetMapping(path = "/email/{email}")
+    public ResponseEntity<?> findUserByEmail(@PathVariable(value="email") String email){
+    Optional<User> userOptional = Optional.ofNullable(userService.findByEmailAddress(email));
+    if(userOptional.isPresent()){
+        result.put("message", "success");
+        result.put("data", userOptional.get());
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    } else {
+        result.put("message", "cannot delete user with email " + email);
+        return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+    }
 
+
+}
 
 
 

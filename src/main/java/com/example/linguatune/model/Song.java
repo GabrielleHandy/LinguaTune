@@ -33,7 +33,7 @@ import java.util.List;
         private String lyrics;
 
         @Column
-        private String original_lan;
+        private String originalLan;
 
         @Column
         private String pictureLink;
@@ -47,14 +47,15 @@ import java.util.List;
     public Song() {
     }
 
-        public Song(Long id, String title, String artist, List<FlashCard> flashCards, String uri, String lyrics, String original_lan, String pictureLink, List<Translation> availableTrans) {
+        public Song(Long id, String title, String artist, List<FlashCard> flashCards, String uri, String lyrics, String originalLan, String pictureLink, List<Translation> availableTrans) {
             this.id = id;
             this.title = title;
             this.artist = artist;
             this.flashCards = flashCards;
             this.uri = uri;
             this.lyrics = lyrics;
-            this.original_lan = original_lan;
+            this.originalLan = originalLan;
+
             this.pictureLink = pictureLink;
             this.availableTrans = availableTrans;
         }
@@ -99,15 +100,16 @@ import java.util.List;
             this.uri = uri;
     }
 
-        public String getOriginal_lan() {
-        return original_lan;
-    }
 
-    public void setOriginal_lan(String original_lan) {
-        this.original_lan = original_lan;
-    }
+        public String getOriginalLan() {
+            return originalLan;
+        }
 
-    public List<Translation> getAvailableTrans() {
+        public void setOriginalLan(String originalLan) {
+            this.originalLan = originalLan;
+        }
+
+        public List<Translation> getAvailableTrans() {
         return availableTrans;
     }
 
@@ -140,7 +142,7 @@ import java.util.List;
                     ", artist='" + artist + '\'' +
                     ", flashCards=" + flashCards +
                     ", uri='" + uri + '\'' +
-                    ", original_lan='" + original_lan + '\'' +
+                    ", originalLan='" + originalLan + '\'' +
                     ", pictureLink='" + pictureLink + '\'' +
                     ", availableTrans=" + availableTrans +
                     '}';

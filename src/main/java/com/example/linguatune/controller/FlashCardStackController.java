@@ -1,6 +1,7 @@
 package com.example.linguatune.controller;
 
 import com.example.linguatune.model.FlashCardStack;
+import com.example.linguatune.model.StudyPage;
 import com.example.linguatune.service.FlashCardStackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -34,7 +36,7 @@ public class FlashCardStackController {
 
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<?> getStackById(@PathVariable(value = "id") Long id) {
         Optional<FlashCardStack> flashCardStackOptional = Optional.ofNullable(flashCardStackService.findById(id));
         if (flashCardStackOptional.isPresent()) {
             result.put("message", "Success");
@@ -58,6 +60,17 @@ public class FlashCardStackController {
             return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
         }
     }
-
+    @GetMapping(path = "/studypage/{studyPageId}")
+    public ResponseEntity<?> getMyPages(@PathVariable(value = "studyPageId" )Long id){
+        Optional<List<FlashCardStack>> flashCardStackOptional = Optional.ofNullable(flashCardStackService.getMyStacks(id));
+        if (flashCardStackOptional.isPresent()) {
+            result.put("message", "Success");
+            result.put("data", flashCardStackOptional.get());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } else {
+            result.put("message", "You have no stacks");
+            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        }
+    }
 
 }

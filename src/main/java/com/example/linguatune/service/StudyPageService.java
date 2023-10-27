@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -57,11 +59,21 @@ public class StudyPageService {
     public StudyPage findStudyPageById(long id) {
         Optional<StudyPage> optionalStudyPage = studyPageRepository.findById(id);
         if (optionalStudyPage.isPresent()) {
+            optionalStudyPage.get().setDateAccessed(new Date());
+            studyPageRepository.save(optionalStudyPage.get());
             return optionalStudyPage.get();
         }
         throw new InformationNotFoundException("StudyPage with id " + id + " doesn't exist");
     }
 
+    public List<StudyPage> getPages() {
+        setLoggedInUser();
+        List<StudyPage> optionalStudyPage = studyPageRepository.findByUser(loggedinUser);
+        if (!optionalStudyPage.isEmpty()) {
+            return optionalStudyPage;
+        }
+        throw new InformationNotFoundException("You have no study pages");
+    }
     /**
      * Create a new study page for a specified language.
      *
@@ -72,7 +84,7 @@ public class StudyPageService {
     public StudyPage createStudyPage(String language) {
         setLoggedInUser();
         Language language1 = languageRepository.findByName(language);
-        if (!loggedinUser.getStudyPages().stream().anyMatch(studyPage -> studyPage.getLanguage().getName().equals(language1.getName())))
+        if (loggedinUser.getStudyPages().stream().noneMatch(studyPage -> studyPage.getLanguage().getName().equals(language1.getName())))
         {
             StudyPage newStudyPage = new StudyPage();
             newStudyPage.setLanguage(language1);

@@ -10,4 +10,6 @@ import java.util.List;
 public interface SongRepository extends JpaRepository<Song, Long> {
 
     List<Song> findAllByArtist(String s);
+
+    List<Song> findByOriginalLan(String lan);
 }

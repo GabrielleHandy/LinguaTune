@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -52,6 +53,7 @@ public class FlashCardStackService {
         Optional<FlashCardStack> optionalFlashCardStack = flashCardStackRepository.findById(l);
 
         if(optionalFlashCardStack.isPresent()){
+
             return optionalFlashCardStack.get();
         }
         throw new InformationNotFoundException("Couldn't find FlashCardStack with Id " + l);
@@ -94,11 +96,13 @@ public class FlashCardStackService {
         setLoggedInUser();
         Optional<FlashCardStack> flashCardStackOptional = flashCardStackRepository.findById(flashCardStackId);
         if(flashCardStackOptional.isPresent()){
-            if(loggedInUser.getStudyPages().contains(flashCardStackOptional.get().getMadeBy())){
+            if(flashCardStackOptional.get().getMadeBy().getUser().getEmailAddress().equals(loggedInUser.getEmailAddress())){
+
                 flashCardStackRepository.deleteById(flashCardStackId);
                 return flashCardStackOptional.get();
 
-            } throw new InformationNotFoundException("FlashCardStack with Id " + flashCardStackId+ " doesn't belong to you");
+            }
+            throw new InformationNotFoundException("FlashCardStack with Id " + flashCardStackId+ " doesn't belong to you");
         }
 
         throw new InformationNotFoundException("Couldn't find FlashCardStack with Id " + flashCardStackId);
@@ -108,6 +112,12 @@ public class FlashCardStackService {
         }
 
 
+    public List<FlashCardStack> getMyStacks(Long id) {
+        Optional<StudyPage> studyPageOptional = studyPageRepository.findById(id);
+        if(studyPageOptional.isPresent()){
+            return flashCardStackRepository.findByMadeBy(studyPageOptional.get());
 
-
+        }
+        throw new InformationNotFoundException("Couldn't find FlashCardStacks for StudyPage with Id " + id);
+    }
 }

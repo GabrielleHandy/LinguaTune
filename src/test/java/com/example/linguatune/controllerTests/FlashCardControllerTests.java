@@ -75,7 +75,7 @@ public class FlashCardControllerTests {
     public void createFlashCard_success() throws Exception {
 
 
-        when(flashCardService.createFlashCard(anyLong(), any(FlashCard.class))).thenReturn(testFlashCard_1);
+        when(flashCardService.createFlashCard(anyLong(), any(FlashCard.class), anyLong())).thenReturn(testFlashCard_1);
 
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/flashcards/create/1")
@@ -95,7 +95,7 @@ public class FlashCardControllerTests {
     public void createFlashCard_fail() throws Exception {
 
 
-        when(flashCardService.createFlashCard(anyLong(), any(FlashCard.class))).thenReturn(null);
+        when(flashCardService.createFlashCard(anyLong(), any(FlashCard.class), anyLong())).thenReturn(null);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/flashcards/create/1")
                         .contentType(MediaType.APPLICATION_JSON)

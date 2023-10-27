@@ -81,7 +81,7 @@ public class FlashCardServiceTests {
 
 
         when(flashCardRepository.save(any(FlashCard.class))).thenReturn(flashCard);
-        FlashCard result = flashCardService.createFlashCard(flashCardStack.getId(), flashCard);
+        FlashCard result = flashCardService.createFlashCard(flashCardStack.getId(), flashCard, 1L);
         assertEquals(result.getOriginalText(), "woop");
 
     }

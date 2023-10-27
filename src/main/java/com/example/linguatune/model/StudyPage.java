@@ -5,6 +5,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,8 +35,10 @@ public class StudyPage {
     @Column
     private String recentSongs;
 
-
+    @Column
+    private Date dateAccessed;
     public StudyPage() {
+        this.dateAccessed = new Date();
     }
 
     public StudyPage(Long id, User user, Language language, Set<FlashCardStack> flashcardStacks, String recentSongs) {
@@ -44,6 +47,7 @@ public class StudyPage {
         this.language = language;
         this.flashcardStacks = flashcardStacks;
         this.recentSongs = recentSongs;
+        this.dateAccessed = new Date();
     }
 
     public Long getId() {
@@ -87,6 +91,14 @@ public class StudyPage {
     }
     public void addRecentSongs(String title){
         this.recentSongs = this.recentSongs + "," + title;
+    }
+
+    public Date getDateAccessed() {
+        return dateAccessed;
+    }
+
+    public void setDateAccessed(Date dateAccessed) {
+        this.dateAccessed = dateAccessed;
     }
 
     @Override

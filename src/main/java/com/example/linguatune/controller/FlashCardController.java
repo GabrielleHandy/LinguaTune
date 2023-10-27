@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -21,9 +22,9 @@ public class FlashCardController {
 
 
 
-    @PostMapping(path = "/create/{stackId}")
-    public ResponseEntity<?> createFlashCardRoute(@RequestBody FlashCard flashCard, @PathVariable(value = "stackId") Long id) {
-        Optional<FlashCard> FlashCardOptional = Optional.ofNullable(flashCardService.createFlashCard( id, flashCard));
+    @PostMapping(path = "/song/{songId}/create/{stackId}")
+    public ResponseEntity<?> createFlashCardRoute(@RequestBody FlashCard flashCard, @PathVariable(value = "stackId") Long id, @PathVariable(value = "songId") Long songId) {
+        Optional<FlashCard> FlashCardOptional = Optional.ofNullable(flashCardService.createFlashCard( id, flashCard, songId));
         if (FlashCardOptional.isPresent()) {
             result.put("message", "Created successfully!");
             result.put("data", FlashCardOptional.get());
@@ -38,6 +39,19 @@ public class FlashCardController {
     @GetMapping(path = "/{id}")
     public ResponseEntity<?> getFlashCardById(@PathVariable(value = "id") Long id) {
         Optional<FlashCard> flashCardOptional = Optional.ofNullable(flashCardService.findById(id));
+        if (flashCardOptional.isPresent()) {
+            result.put("message", "Success");
+            result.put("data", flashCardOptional.get());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } else {
+            result.put("message", "Flashcard with id " + id + " not found");
+            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping(path = "/stack/{id}")
+    public ResponseEntity<?> getFlashCardByStackId(@PathVariable(value = "id") Long id) {
+        Optional<List<FlashCard>> flashCardOptional = Optional.ofNullable(flashCardService.findByCardStack(id));
         if (flashCardOptional.isPresent()) {
             result.put("message", "Success");
             result.put("data", flashCardOptional.get());

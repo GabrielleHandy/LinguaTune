@@ -5,9 +5,13 @@ import com.example.linguatune.model.FlashCardStack;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface FlashCardRepository extends JpaRepository<FlashCard,Long> {
     FlashCard findByOriginalTextAndCardStack(String s, FlashCardStack flashCardStack);
 
     FlashCard findByIdAndCardStack(Long flashCardStackId, FlashCardStack flashCardStack);
+
+    List<FlashCard> findByCardStack(FlashCardStack cardStack);
 }

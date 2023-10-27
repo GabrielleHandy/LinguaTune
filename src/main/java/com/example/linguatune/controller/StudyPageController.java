@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -44,6 +45,19 @@ public class StudyPageController {
             return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
         }
     }
+    @GetMapping(path = "/")
+    public ResponseEntity<?> getMyPages(){
+        Optional<List<StudyPage>> studyPageOptional = Optional.ofNullable(studyPageService.getPages());
+        if (studyPageOptional.isPresent()) {
+            result.put("message", "Success");
+            result.put("data", studyPageOptional.get());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } else {
+            result.put("message", "You have no pages");
+            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        }
+    }
+
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteUserById( @PathVariable (value = "id") Long id){
         Optional<StudyPage> studyPageOptional = Optional.ofNullable(studyPageService.deleteStudyPage(id));
