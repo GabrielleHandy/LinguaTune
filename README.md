@@ -52,7 +52,7 @@ To run LinguaTune on your local machine, follow these steps:
 1. Clone the repository: `git clone https://github.com/your/repo.git`
 2. Navigate to the project directory: `cd linguatune`
 3. Install dependencies: `npm install`
-4. Start the Angular application: `ng serve`
+4. Start the Angular application [link to frontend](https://github.com/GabrielleHandy/LinguaTune-Front): `ng serve`
 5. Start the Spring Boot server: `mvn spring-boot:run`
 6. Access the application in your browser at `http://localhost:4200`
 
