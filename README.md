@@ -139,6 +139,12 @@ To run LinguaTune on your local machine, follow these steps:
 
 </details>
 
+## Video Demo
+
+[![Video Demo](https://github.com/GabrielleHandy/LinguaTune/assets/91081738/835afcdd-9116-4fc6-9e01-5a18dfb22cb6)](https://www.youtube.com/watch?v=IAZg3kOEYpg)
+
+
+
 ## Challenges Faced
 
 During the development of LinguaTune, I faced several challenges, including:
